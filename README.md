@@ -1,6 +1,3 @@
-# Pos-Projekt_Mair-Lehner
-Projekt von Julian Mair und Maximilian Lehner im Fach Programmieren der HTL Grieskirchen.
-
 
 # REISEPLANER
 Bei unserer **Reiseplaner – App** geht es darum, alle seine zukünftigen Reisen auf einem Blick im Auge zu behalten. Damit werden Notizen zur Reise, das Datum, Urlaubsort, etc. ersichtlich.
