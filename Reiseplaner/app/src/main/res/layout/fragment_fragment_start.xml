@@ -33,7 +33,7 @@
         android:layout_height="500dp" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonStart"
         android:layout_width="259dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
