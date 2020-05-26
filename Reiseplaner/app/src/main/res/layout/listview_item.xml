@@ -80,7 +80,7 @@
                         android:gravity="center"
                         android:text="15°"
                         android:textColor="#FFFFFF"
-                        android:textSize="45"
+                        android:textSize="45dp"
                         android:textStyle="bold" />
 
                 </RelativeLayout>
