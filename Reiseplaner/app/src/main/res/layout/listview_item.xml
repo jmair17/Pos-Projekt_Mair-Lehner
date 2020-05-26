@@ -34,7 +34,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/trip_name"
+                        android:id="@+id/listItem_trip_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Name der Reise"
@@ -43,7 +43,7 @@
                         android:textStyle="bold|italic" />
 
                     <TextView
-                        android:id="@+id/trip_destination"
+                        android:id="@+id/listItem_trip_destination"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Reiseziel"
@@ -52,7 +52,7 @@
                         android:textStyle="bold|italic" />
 
                     <TextView
-                        android:id="@+id/trip_daysLeft"
+                        android:id="@+id/listItem_trip_daysLeft"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Reise in..."
@@ -68,6 +68,7 @@
                     android:layout_height="match_parent">
 
                     <TextView
+                        android:id="@+id/listItem_destinationTemperatur"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentTop="true"
@@ -79,7 +80,7 @@
                         android:gravity="center"
                         android:text="15°"
                         android:textColor="#FFFFFF"
-                        android:textSize="40dp"
+                        android:textSize="45"
                         android:textStyle="bold" />
 
                 </RelativeLayout>
