@@ -38,7 +38,6 @@
         android:layout_width="259dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/rounded_button"
         android:backgroundTint="#636363"
         android:gravity="center"
         android:text="Get Started!"
