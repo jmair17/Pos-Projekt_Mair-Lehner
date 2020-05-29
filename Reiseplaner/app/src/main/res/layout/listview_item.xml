@@ -37,7 +37,7 @@
                         android:id="@+id/listItem_trip_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Name der Reise"
+                        android:hint="Category"
                         android:textColor="#E4E4E4"
                         android:textSize="32dp"
                         android:textStyle="bold|italic" />
@@ -46,7 +46,7 @@
                         android:id="@+id/listItem_trip_destination"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Reiseziel"
+                        android:hint="Destination"
                         android:textColor="#838383"
                         android:textSize="24dp"
                         android:textStyle="bold|italic" />
@@ -55,7 +55,7 @@
                         android:id="@+id/listItem_trip_daysLeft"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Reise in..."
+                        android:hint="Days left till..."
                         android:textColor="#474747"
                         android:textSize="22dp"
                         android:textStyle="bold|italic" />
@@ -78,7 +78,7 @@
                         android:layout_marginEnd="0dp"
                         android:layout_marginBottom="0dp"
                         android:gravity="center"
-                        android:text="15°"
+                        android:hint="0°"
                         android:textColor="#FFFFFF"
                         android:textSize="45dp"
                         android:textStyle="bold" />
