@@ -7,6 +7,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -68,6 +71,25 @@ public class MainActivity extends AppCompatActivity {
             content = weather.execute("https://openweathermap.org/data/2.5/weather?q=London,uk&appid=439d4b804bc8187953eb36d2a8c26a02").get();
 
             Log.i("content", content);
+
+            //Json
+            JSONObject jsonObject = new JSONObject(content);
+            String weatherData = jsonObject.getString("weather");
+            Log.i("weatherData",weatherData);
+
+            JSONArray array = new JSONArray(weatherData);
+
+            String main ="";
+            String description="";
+
+            for (int i = 0; i < array.length(); i++){
+                JSONObject weatherPart = array.getJSONObject(i);
+                main = weatherPart.getString("main");
+                description = weatherPart.getString("description");
+            }
+            Log.i("main",main);
+            Log.i("description",description);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
