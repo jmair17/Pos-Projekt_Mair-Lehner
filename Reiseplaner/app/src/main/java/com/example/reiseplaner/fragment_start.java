@@ -39,6 +39,7 @@ public class fragment_start extends Fragment {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
 
                 ft.replace(R.id.mainLayout, fragmentOverview);
+                ft.addToBackStack(null);
                 ft.commit();
             }
         });

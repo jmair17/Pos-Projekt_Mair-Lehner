@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="661dp" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingactionbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,5 +22,5 @@
         android:scrollbarSize="8dp"
         android:src="@drawable/ic_add_floatingaction_btn"
          app:maxImageSize="48dp"
-        android:layout_marginRight="15dp"/>
+        android:layout_marginRight="15dp"/>-->
 </LinearLayout>
