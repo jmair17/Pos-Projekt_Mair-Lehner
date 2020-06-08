@@ -120,6 +120,10 @@ public class MainActivity extends AppCompatActivity {
 
         //*************Weather API*********************
 
+
+        //*************ADD NEW JOURNEY*****************
+        addNewJourney();
+
     }
 
     ///////ADDING A NEW JOURNEY///////////
@@ -138,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
     ///////ADDING A NEW JOURNEY///////////
     public void addNewJourney(){
         FloatingActionButton fab = findViewById(R.id.floatingactionbutton);
-        fab.setOnClickListener(v -> {
+        //fab.setOnClickListener(v -> {
 
             View vDialog = addLayout();
             vDialog.findViewById(R.id.editTextCategory);
@@ -150,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                     } ).setNegativeButton("Cancel", null)
                     .show();
-        });
+            //});
         }
-    }
 }
