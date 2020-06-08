@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 
+import com.example.reiseplaner.Journey;
 import com.example.reiseplaner.MainActivity;
 
 import java.util.Calendar;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class MyAdapter<T> extends ArrayAdapter {
 
-    private static final String TAG = MainActivity.class.getSimpleName():
+    private static final String TAG = MainActivity.class.getSimpleName();
     private SharedPreferences prefs;
 
     public MyAdapter(@NonNull Context context, int resource, List objects) {
