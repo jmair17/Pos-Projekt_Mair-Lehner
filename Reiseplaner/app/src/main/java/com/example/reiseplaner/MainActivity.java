@@ -3,11 +3,13 @@ package com.example.reiseplaner;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -39,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
 
     ///////////////OTHERS////////////////////
     private MyAdapter<Journey> adapter;
+    private FloatingActionButton fab;
+    Button buttonStart;
+
 
 
     class Weather extends AsyncTask<String, Void, String>{
@@ -113,10 +118,22 @@ public class MainActivity extends AppCompatActivity {
 
         //*************FRAGMENTS**********************
         fragment_start startFragment = new fragment_start();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.mainLayout,startFragment).commit();
+        fragment_overview overviewFragment = new fragment_overview();
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.mainLayout, startFragment).commit();
+        fragmentTransaction.addToBackStack(null);
 
 
+        //FragmentManager fragmentManager = getSupportFragmentManager();
+        //fragmentManager.beginTransaction().add(R.id.mainLayout,startFragment).commit();
+
+        buttonStart = (Button)findViewById(R.id.buttonStart);
+        setContentView(R.layout.fragment_fragment_overview);
+
+        buttonStart.setOnClickListener((v -> {
+            fragmentTransaction.add(R.id.fragment_overview, overviewFragment);
+        }));
 
         //*************Weather API*********************
 
@@ -141,8 +158,8 @@ public class MainActivity extends AppCompatActivity {
 
     ///////ADDING A NEW JOURNEY///////////
     public void addNewJourney(){
-        FloatingActionButton fab = findViewById(R.id.floatingactionbutton);
-        //fab.setOnClickListener(v -> {
+        fab = findViewById(R.id.floatingactionbutton);
+        fab.setOnClickListener(v -> {
 
             View vDialog = addLayout();
             vDialog.findViewById(R.id.editTextCategory);
@@ -154,6 +171,6 @@ public class MainActivity extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                     } ).setNegativeButton("Cancel", null)
                     .show();
-            //});
+            });
         }
 }
