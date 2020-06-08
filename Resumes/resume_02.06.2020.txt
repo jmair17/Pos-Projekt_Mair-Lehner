@@ -1,0 +1,10 @@
+Was haben wir erledigt?
+
+	- Teilimplementierung REST API
+	- Design einzelner Fragments
+
+Liegen wir im Zeitplan?
+
+	- Ja
+
+Es sind keine Probleme aufgetreten, alles hat Gut funktioniert.

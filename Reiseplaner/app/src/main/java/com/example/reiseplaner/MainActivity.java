@@ -1,13 +1,20 @@
 package com.example.reiseplaner;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.reiseplaner.Adapters.MyAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,6 +31,19 @@ import java.util.concurrent.ExecutionException;
 public class MainActivity extends AppCompatActivity {
 
     TextView editText;
+
+    ///////////////ADDING NEW JOURNEY////////////////
+    private EditText editTextCategory;
+    private EditText editTextDestination;
+    private EditText editTextJourneyDate;
+    private EditText editTextThingsNotToForget;
+    private EditText editTextNotes;
+
+    ///////////////OTHERS////////////////////
+    private MyAdapter<Journey> adapter;
+    private FloatingActionButton fab;
+    Button buttonStart;
+
 
 
     class Weather extends AsyncTask<String, Void, String>{
@@ -98,10 +118,59 @@ public class MainActivity extends AppCompatActivity {
 
         //*************FRAGMENTS**********************
         fragment_start startFragment = new fragment_start();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.mainLayout,startFragment).commit();
+        fragment_overview overviewFragment = new fragment_overview();
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.mainLayout, startFragment).commit();
+        fragmentTransaction.addToBackStack(null);
+
+
+        //FragmentManager fragmentManager = getSupportFragmentManager();
+        //fragmentManager.beginTransaction().add(R.id.mainLayout,startFragment).commit();
+
+        buttonStart = (Button)findViewById(R.id.buttonStart);
+        setContentView(R.layout.fragment_fragment_overview);
+
+        buttonStart.setOnClickListener((v -> {
+            fragmentTransaction.add(R.id.fragment_overview, overviewFragment);
+        }));
 
         //*************Weather API*********************
 
+
+        //*************ADD NEW JOURNEY*****************
+        addNewJourney();
+
     }
+
+    ///////ADDING A NEW JOURNEY///////////
+    public View addLayout(){
+        View vDialog = getLayoutInflater().inflate(R.layout.layout_newjourney, null);
+
+        editTextCategory = findViewById(R.id.editTextCategory);
+        editTextDestination = findViewById(R.id.editTextDestination);
+        editTextJourneyDate = findViewById(R.id.editTextJourneyDate);
+        editTextThingsNotToForget = findViewById(R.id.editTextThingsNotToForget);
+        editTextNotes = findViewById(R.id.editTextNotes);
+
+        return vDialog;
+    }
+
+    ///////ADDING A NEW JOURNEY///////////
+    public void addNewJourney(){
+        fab = findViewById(R.id.floatingactionbutton);
+        fab.setOnClickListener(v -> {
+
+            View vDialog = addLayout();
+            vDialog.findViewById(R.id.editTextCategory);
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("New Journey")
+                    .setView(vDialog)
+                    .setPositiveButton("Add", (dialog, which) ->{
+                        adapter.add(new Journey(editTextCategory.getText().toString(), editTextDestination.getText().toString(), editTextJourneyDate.getText().toString(), editTextThingsNotToForget.getText().toString(), editTextNotes.getText().toString()));
+                        adapter.notifyDataSetChanged();
+                    } ).setNegativeButton("Cancel", null)
+                    .show();
+            });
+        }
 }
