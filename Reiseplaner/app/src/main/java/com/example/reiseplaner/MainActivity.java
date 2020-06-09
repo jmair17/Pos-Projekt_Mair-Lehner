@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     ///////////////OTHERS////////////////////
     private MyAdapter<Journey> adapter;
-    private FloatingActionButton fab;
+    private Button fab;
     Button buttonStart;
 
 
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
     ///////ADDING A NEW JOURNEY///////////
     public void addNewJourney(){
         setContentView(R.layout.fragment_fragment_overview);
-        fab = findViewById(R.id.floatingactionbutton);
+        fab = findViewById(R.id.button2);
 
         fab.setOnClickListener(v -> {
 
