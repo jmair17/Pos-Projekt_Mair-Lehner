@@ -3,13 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".SecondFragment">
+    tools:context=".SecondFragment"
+    android:id="@+id/fragment_overview">
 
-
-    <TextView
-        android:id="@+id/textView"
+    <ListView
+        android:id="@+id/listView_trips"
         android:layout_width="match_parent"
+        android:layout_height="661dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingactionbutton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hier alles eingeben!" />
+        android:layout_gravity="bottom|right"
+        android:clickable="true"
+        android:foregroundGravity="bottom"
+        android:scrollbarSize="8dp"
+        android:src="@drawable/ic_add_floatingaction_btn"
+        app:maxImageSize="48dp"
+        android:layout_marginRight="15dp"/>
 </LinearLayout>
