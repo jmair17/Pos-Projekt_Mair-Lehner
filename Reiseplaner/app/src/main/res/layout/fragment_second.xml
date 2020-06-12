@@ -24,4 +24,6 @@
         android:src="@drawable/ic_add_floatingaction_btn"
         app:maxImageSize="48dp"
         android:layout_marginRight="15dp"/>
+
+
 </LinearLayout>

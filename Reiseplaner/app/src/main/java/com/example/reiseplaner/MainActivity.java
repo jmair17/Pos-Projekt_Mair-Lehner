@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     ///////////////OTHERS////////////////////
-    private MyAdapter<Journey> adapter;
+
 
     Button buttonStart;
 

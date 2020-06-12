@@ -36,6 +36,7 @@ public class StartFragment extends Fragment {
                 SecondFragment secondFragment = new SecondFragment();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.mainLayout, secondFragment);
+                ft.addToBackStack(null);
                 ft.commit();
             }
         });
