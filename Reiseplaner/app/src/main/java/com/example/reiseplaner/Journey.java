@@ -2,6 +2,8 @@ package com.example.reiseplaner;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class Journey {
@@ -11,6 +13,7 @@ public class Journey {
     private String thingsNotToForget;
     private String notes;
 
+    //public static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm");
     public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy hh:mm");
 
 
@@ -23,6 +26,7 @@ public class Journey {
         this.destination = destination;
         this.thingsNotToForget = thingsNotToForget;
         this.notes = notes;
+        //this.date = LocalDateTime.parse(time,DATE_FORMAT);
         try {
             this.date = DATE_FORMAT.parse(time);
         } catch (ParseException e){
