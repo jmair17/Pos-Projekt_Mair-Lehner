@@ -21,6 +21,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.w3c.dom.Text;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -57,8 +58,9 @@ public class SecondFragment extends Fragment {
         listView = v.findViewById(R.id.listView_trips);
         //adapter = new MyAdapter(getActivity(), R.layout.listview_item, toDo);
         //listView.setAdapter(adapter);
-        journeyAdapter = new JourneyAdapter(getActivity(), R.layout.listview_item, toDo);
+        journeyAdapter = new JourneyAdapter(getActivity(), R.layout.listview_item2, toDo);
         listView.setAdapter(journeyAdapter);
+        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
 
 
@@ -74,7 +76,7 @@ public class SecondFragment extends Fragment {
                 Calendar currentDate = Calendar.getInstance();
                 if (!editTextJourneyDate.getText().toString().isEmpty()) {
                     try {
-                        currentDate.setTime(Journey.DATE_FORMAT.parse(editTextJourneyDate.getText().toString()));
+                        currentDate.setTime(DATE_FORMAT.parse(editTextJourneyDate.getText().toString()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -85,7 +87,7 @@ public class SecondFragment extends Fragment {
                         mTimePicker = new TimePickerDialog(getActivity(), (timePicker, hourOfDay, minute) -> {
                             calInput.set(Calendar.HOUR_OF_DAY, hourOfDay);
                             calInput.set(Calendar.MINUTE, minute);
-                            editTextJourneyDate.setText(Journey.DATE_FORMAT.format(calInput.getTime()));
+                            editTextJourneyDate.setText(DATE_FORMAT.format(calInput.getTime()));
                         }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), true);
                         mTimePicker.setTitle("Select time");
                         mTimePicker.show();
@@ -120,7 +122,7 @@ public class SecondFragment extends Fragment {
         TextView notes = vDialog.findViewById(R.id.editTextNotes);
         String n = notes.getText().toString();
 
-        toDo.add(new Journey(cat, dest, date, things, n));
+        toDo.add(new Journey(cat, dest,things, n,date));
         journeyAdapter.notifyDataSetChanged();
     }
 

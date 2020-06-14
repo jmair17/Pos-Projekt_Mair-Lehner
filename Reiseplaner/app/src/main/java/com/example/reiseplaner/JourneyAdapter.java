@@ -34,13 +34,13 @@ public class JourneyAdapter extends BaseAdapter {
     @Override
     public View getView(int i , View view, ViewGroup viewGroup) {
         Journey journey = journeys.get(i);
-        String datum = DATE_FORMAT.format(journey.getDate());
+        //String datum = DATE_FORMAT.format(journey.getDate());
         View listItem = (view == null) ? inflater.inflate(this.layoutId,null ) : view;
-        ((TextView) listItem.findViewById(R.id.editTextJourneyDate)).setText(datum);
-        ((TextView) listItem.findViewById(R.id.editTextDestination)).setText(journey.getDestination());
-        ((TextView) listItem.findViewById(R.id.editTextCategory)).setText(journey.getCategory());
-        ((TextView) listItem.findViewById(R.id.editTextNotes)).setText(journey.getNotes());
-        ((TextView) listItem.findViewById(R.id.editTextThingsNotToForget)).setText(journey.getThingsNotToForget());
+        ((TextView) listItem.findViewById(R.id.date)).setText(journey.getDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        ((TextView) listItem.findViewById(R.id.destination)).setText(journey.getDestination());
+        ((TextView) listItem.findViewById(R.id.category)).setText(journey.getCategory());
+        ((TextView) listItem.findViewById(R.id.note)).setText(journey.getNotes());
+        ((TextView) listItem.findViewById(R.id.importentThings)).setText(journey.getThingsNotToForget());
 
         return listItem ;
     }

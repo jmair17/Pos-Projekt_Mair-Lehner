@@ -9,12 +9,13 @@ import java.util.Date;
 public class Journey {
     private String category;
     private String destination;
-    private Date date;
+    //private Date date;
+    private LocalDateTime date;
     private String thingsNotToForget;
     private String notes;
 
-    //public static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm");
-    public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+    private static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+    //public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy hh:mm");
 
 
     public Journey(String category, String destination, String thingsNotToForget, String notes, String time) {
@@ -26,12 +27,12 @@ public class Journey {
         this.destination = destination;
         this.thingsNotToForget = thingsNotToForget;
         this.notes = notes;
-        //this.date = LocalDateTime.parse(time,DATE_FORMAT);
-        try {
+        this.date = LocalDateTime.parse(time,DATE_FORMAT);
+        /*try {
             this.date = DATE_FORMAT.parse(time);
         } catch (ParseException e){
             e.printStackTrace();
-        }
+        }*/
     }
 
     public String getCategory() {
@@ -44,7 +45,7 @@ public class Journey {
     }
 
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 

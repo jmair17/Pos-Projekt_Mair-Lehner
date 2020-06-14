@@ -31,7 +31,7 @@ public class MyAdapter<T> extends ArrayAdapter {
         View view = super.getView(position, convertView, parent);
         try {
             Calendar noteCal = Calendar.getInstance();
-            noteCal.setTime(((Journey) getItem(position)).getDate());
+            //noteCal.setTime(((Journey) getItem(position)).getDate());
         } catch (NumberFormatException e){
             e.printStackTrace();
         }
