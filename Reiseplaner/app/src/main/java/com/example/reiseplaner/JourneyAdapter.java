@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -39,8 +38,6 @@ public class JourneyAdapter extends BaseAdapter {
         ((TextView) listItem.findViewById(R.id.date)).setText(journey.getDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         ((TextView) listItem.findViewById(R.id.destination)).setText(journey.getDestination());
         ((TextView) listItem.findViewById(R.id.category)).setText(journey.getCategory());
-        ((TextView) listItem.findViewById(R.id.note)).setText(journey.getNotes());
-        ((TextView) listItem.findViewById(R.id.importentThings)).setText(journey.getThingsNotToForget());
 
         return listItem ;
     }
