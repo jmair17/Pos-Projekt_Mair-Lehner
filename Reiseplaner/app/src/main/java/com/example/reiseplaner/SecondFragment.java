@@ -8,7 +8,10 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
@@ -126,6 +129,37 @@ public class SecondFragment extends Fragment {
         journeyAdapter.notifyDataSetChanged();
     }
 
+    /*@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_layout, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        Log.d("Ok", "onOptionsItemSelected:" + id);
+        dialogView = getLayoutInflater().inflate(R.layout.dialog_layout,null);
+        switch (id) {
+            case R.id.newItem:
+                alert.setView(dialogView);
+                alert.setPositiveButton("OK", (dialog, which)-> handleDialog(dialogView));
+                alert.setNegativeButton("CANCEL", null);
+                alert.show();
+                break;
+            case R.id.save:
+                save();
+                break;
+            case R.id.doneItems:
+                doneItems();
+                break;
+            case R.id.openItems:
+                openItems();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+*/
     /*public View addLayout() {
         View z = getLayoutInflater().inflate(R.layout.layout_newjourney,null);
         editTextCategory = z.findViewById(R.id.editTextCategory);
