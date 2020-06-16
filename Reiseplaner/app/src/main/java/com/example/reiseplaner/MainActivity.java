@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity{
     private EditText editTextNotes;
 
     ///////////////OTHERS////////////////////
-    private MyAdapter<Journey> adapter;
     private FloatingActionButton fab;
     Button buttonStart;
 

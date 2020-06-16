@@ -60,7 +60,6 @@ public class SecondFragment extends Fragment{
     private EditText editTextJourneyDate;
     private EditText editTextThingsNotToForget;
     private EditText editTextNotes;
-    private MyAdapter adapter;
     private JourneyAdapter journeyAdapter;
     private List<Journey> journeys;
     private ListView listView;
