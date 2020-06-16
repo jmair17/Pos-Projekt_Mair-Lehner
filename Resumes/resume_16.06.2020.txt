@@ -3,6 +3,7 @@ Was haben wir erledigt?
 	- OnContextMenu()
 	- Speichern und Laden von Reisen
 	- Menu
+	- Hinzufügen von Fotos
 	
 
 Liegen wir im Zeitplan?
@@ -12,7 +13,6 @@ Liegen wir im Zeitplan?
 Was machen wir bis nächste Woche?
 
 	- Preferences
-	- Hinzufügen von Fotos
 	- Sensor - GPS
 	- API zum laufen bringen
 
