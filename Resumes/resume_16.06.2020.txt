@@ -9,4 +9,11 @@ Liegen wir im Zeitplan?
 
 	- Ja
 
-Es sind keine Probleme aufgetreten, alles hat Gut funktioniert und wir liegen wieder im Zeitplan.
+Was machen wir bis nächste Woche?
+
+	- Preferences
+	- Hinzufügen von Fotos
+	- Sensor - GPS
+	- API zum laufen bringen
+
+Die API macht noch Probleme, ansonsten hat  alles Gut funktioniert und wir liegen wieder im Zeitplan.
