@@ -2,16 +2,24 @@ package com.example.reiseplaner;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class Journey {
     private String category;
     private String destination;
-    private Date date;
+
+    //private Date date;
+    private LocalDateTime date;
     private String thingsNotToForget;
     private String notes;
+    private String stringDate;
 
-    public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+    private static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+    //public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+
 
 
     public Journey(String category, String destination, String thingsNotToForget, String notes, String time) {
@@ -23,11 +31,9 @@ public class Journey {
         this.destination = destination;
         this.thingsNotToForget = thingsNotToForget;
         this.notes = notes;
-        try {
-            this.date = DATE_FORMAT.parse(time);
-        } catch (ParseException e){
-            e.printStackTrace();
-        }
+
+        this.date = LocalDateTime.parse(time,DATE_FORMAT);
+        this.stringDate = time;
     }
 
     public String getCategory() {
@@ -40,7 +46,8 @@ public class Journey {
     }
 
 
-    public Date getDate() {
+
+    public LocalDateTime getDate() {
         return date;
     }
 
@@ -52,6 +59,33 @@ public class Journey {
     public String getNotes() {
         return notes;
     }
+
+
+    public String getDateAsString()
+    {
+        return stringDate;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public void setDate(String date) {
+        this.date = LocalDateTime.parse(date,DATE_FORMAT);
+    }
+
+    public void setThingsNotToForget(String thingsNotToForget) {
+        this.thingsNotToForget = thingsNotToForget;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
 
     @Override
     public String toString() {
