@@ -1,0 +1,12 @@
+Was haben wir erledigt?
+
+	- OnContextMenu()
+	- Speichern und Laden von Reisen
+	- Menu
+	
+
+Liegen wir im Zeitplan?
+
+	- Ja
+
+Es sind keine Probleme aufgetreten, alles hat Gut funktioniert und wir liegen wieder im Zeitplan.
