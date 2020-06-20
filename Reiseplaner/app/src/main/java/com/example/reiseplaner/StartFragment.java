@@ -34,6 +34,7 @@ public class StartFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 SecondFragment secondFragment = new SecondFragment();
+                PictureFragment pictureFragment = new PictureFragment();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.mainLayout, secondFragment);
                 ft.addToBackStack(null);

@@ -39,6 +39,7 @@ public class JourneyAdapter extends BaseAdapter {
         ((TextView) listItem.findViewById(R.id.destination)).setText(journey.getDestination());
         ((TextView) listItem.findViewById(R.id.category)).setText(journey.getCategory());
 
+
         return listItem ;
     }
 }

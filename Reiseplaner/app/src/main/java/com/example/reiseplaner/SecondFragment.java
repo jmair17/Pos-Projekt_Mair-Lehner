@@ -1,12 +1,22 @@
 package com.example.reiseplaner;
 
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.ContextMenu;
@@ -21,9 +31,12 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
@@ -60,22 +73,28 @@ public class SecondFragment extends Fragment{
     private EditText editTextJourneyDate;
     private EditText editTextThingsNotToForget;
     private EditText editTextNotes;
-    private MyAdapter adapter;
     private JourneyAdapter journeyAdapter;
     private List<Journey> journeys;
     private ListView listView;
     AlertDialog.Builder alert;
+    AlertDialog.Builder alert2;
     DatePickerDialog mDatePicker;
     TimePickerDialog mTimePicker;
     private List<Journey> ranOutItems;
     private String filename;
     private View w;
+    private View x;
+    private View p;
     TextView category;
     TextView destination;
     TextView importantThings;
     TextView notes;
     TextView time;
+
+    private AlertDialog dialogReference;
     MainActivity.Weather handleWeather;
+
+
 
 
     public SecondFragment() {
@@ -87,11 +106,17 @@ public class SecondFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_second, container, false);
-        View y = inflater.inflate(R.layout.listview_item,container,false);
+        View y = inflater.inflate(R.layout.listview_item, container, false);
+        w = getLayoutInflater().inflate(R.layout.layout_newjourney, null);
+        x = getLayoutInflater().inflate(R.layout.listview_item2, null);
+
+
+
         fab = v.findViewById(R.id.floatingactionbutton);
         journeys = new ArrayList<>();
         ranOutItems = new ArrayList<>();
         alert = new AlertDialog.Builder(getActivity());
+        alert2 = new AlertDialog.Builder(getActivity());
         journeyAdapter = new JourneyAdapter(getActivity(), R.layout.listview_item, journeys);
         listView = v.findViewById(R.id.listView_trips);
         listView.setAdapter(journeyAdapter);
@@ -101,15 +126,10 @@ public class SecondFragment extends Fragment{
         setHasOptionsMenu(true);
         handleWeather = new MainActivity().new Weather();
         filename = "journeys.txt";
-        w = getLayoutInflater().inflate(R.layout.layout_newjourney,null);
-
-
 
 
 
         load();
-
-
 
         fab.setOnClickListener(k -> {
 
@@ -159,7 +179,7 @@ public class SecondFragment extends Fragment{
 
 
 
-    public void handleDialog( final View vDialog)
+    public void handleDialog(final View vDialog)
     {
         TextView category = vDialog.findViewById(R.id.editTextCategory);
         String cat = category.getText().toString();
@@ -267,6 +287,10 @@ public class SecondFragment extends Fragment{
     }
 
 
+    public List<Journey> getJourneys() {
+        return journeys;
+    }
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         w = getLayoutInflater().inflate(R.layout.layout_newjourney,null);
@@ -287,44 +311,42 @@ public class SecondFragment extends Fragment{
             alert.setNegativeButton("CANCEL", null);
             alert.show();
         }
-/*        if (item.getItemId () == R.id.showJourney ) {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-            dialogView = getLayoutInflater().inflate(R.layout.details_layout,null);
+        if (item.getItemId () == R.id.showJourney ) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-            Button button = dialogView.findViewById(R.id.back);
-
-
-            TextView date = dialogView.findViewById(R.id.date);
-            TextView text = dialogView.findViewById(R.id.textView);
-            TextView me = dialogView.findViewById(R.id.mess);
-            String datestring = notizen.get(info.position).getDate().toString();
-            date.setText(datestring);
-            String textstring = notizen.get(info.position).getText();
-            text.setText(textstring);
-            String messtring = notizen.get(info.position).getMessage();
-            me.setText(messtring);
-
-            alert2.setView(dialogView);
-
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialogReference.dismiss();
-                }
-            });
-
+            TextView category = x.findViewById(R.id.categoryShow);
+            category.setText(journeys.get(info.position).getCategory());
+            TextView destination = x.findViewById(R.id.destinationShow);
+            destination.setText(journeys.get(info.position).getDestination());
+            TextView journeyDate = x.findViewById(R.id.dateShow);
+            journeyDate.setText(journeys.get(info.position).getDateAsString());
+            TextView thingsNot = x.findViewById(R.id.importentThingsShow);
+            thingsNot.setText(journeys.get(info.position).getThingsNotToForget());
+            TextView notes = x.findViewById(R.id.noteShow);
+            notes.setText(journeys.get(info.position).getNotes());
+            alert2.setView(x);
             dialogReference = alert2.create();
             dialogReference.show();
-
-
-
-            //alert.setNegativeButton("CANCEL", null);
-            //AlertDialog dialg = alert.create();
-            //dialg.show();
-            //Button negativeButton = dialg.getButton(AlertDialog.BUTTON_NEGATIVE);
-            //negativeButton.setTextColor(Color.parseColor("#000000"));
-            //negativeButton.setBackgroundColor(Color.parseColor("#F7CD57"));
-        }*/
+        }
+        if (item.getItemId() == R.id.showPicture)
+        {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+            List<Uri> uris = journeys.get(info.position).getUris();
+            ShowPictureFragment showPictureFragment = new ShowPictureFragment(uris);
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.mainLayout , showPictureFragment);
+            ft.addToBackStack(null);
+            ft.commit();
+        }
+        if (item.getItemId() == R.id.addPicture)
+        {
+            PictureFragment pictureFragment = new PictureFragment();
+            SecondFragment secondFragment = new SecondFragment();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.mainLayout , pictureFragment);
+            ft.addToBackStack(null);
+            ft.commit();
+        }
         return super.onContextItemSelected(item);
     }
 

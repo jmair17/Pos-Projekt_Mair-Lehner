@@ -1,10 +1,14 @@
 package com.example.reiseplaner;
 
+import android.net.Uri;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Journey {
     private String category;
@@ -14,6 +18,7 @@ public class Journey {
     private String thingsNotToForget;
     private String notes;
     private String stringDate;
+    private List<Uri> uris;
 
     private static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
     //public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy hh:mm");
@@ -30,6 +35,7 @@ public class Journey {
         this.notes = notes;
         this.date = LocalDateTime.parse(time,DATE_FORMAT);
         this.stringDate = time;
+        this.uris = new ArrayList<>();
     }
 
     public String getCategory() {
@@ -78,6 +84,16 @@ public class Journey {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public void addUri(Uri uri)
+    {
+        this.uris.add(uri);
+    }
+
+    public List<Uri> getUris()
+    {
+        return this.uris;
     }
 
 
