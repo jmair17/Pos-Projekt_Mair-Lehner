@@ -91,6 +91,19 @@ public class Journey {
         this.uris.add(uri);
     }
 
+    public void setUris(List<Uri> u)
+    {
+        List<Uri> tempUri = this.uris;
+        for (int i = 0; i < tempUri.size(); i++) {
+            for (int j = 0; j < u.size(); j++) {
+                if (!tempUri.get(i).equals(u.get(j)))
+                {
+                    uris.add(u.get(j));
+                }
+            }
+        }
+    }
+
     public List<Uri> getUris()
     {
         return this.uris;

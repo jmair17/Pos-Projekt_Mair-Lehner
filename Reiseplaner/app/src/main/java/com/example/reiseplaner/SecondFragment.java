@@ -90,6 +90,8 @@ public class SecondFragment extends Fragment{
     TextView importantThings;
     TextView notes;
     TextView time;
+    List<Uri> uris;
+    public int checkInfo;
 
     private AlertDialog dialogReference;
     MainActivity.Weather handleWeather;
@@ -98,7 +100,7 @@ public class SecondFragment extends Fragment{
 
 
     public SecondFragment() {
-        // Required empty public constructor
+
     }
 
 
@@ -109,6 +111,7 @@ public class SecondFragment extends Fragment{
         View y = inflater.inflate(R.layout.listview_item, container, false);
         w = getLayoutInflater().inflate(R.layout.layout_newjourney, null);
         x = getLayoutInflater().inflate(R.layout.listview_item2, null);
+        this.uris = new ArrayList<>();
 
 
 
@@ -287,9 +290,6 @@ public class SecondFragment extends Fragment{
     }
 
 
-    public List<Journey> getJourneys() {
-        return journeys;
-    }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -331,7 +331,8 @@ public class SecondFragment extends Fragment{
         if (item.getItemId() == R.id.showPicture)
         {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-            List<Uri> uris = journeys.get(info.position).getUris();
+            journeys.get(checkInfo).setUris(this.uris);
+            uris = journeys.get(info.position).getUris();
             ShowPictureFragment showPictureFragment = new ShowPictureFragment(uris);
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.replace(R.id.mainLayout , showPictureFragment);
@@ -340,15 +341,25 @@ public class SecondFragment extends Fragment{
         }
         if (item.getItemId() == R.id.addPicture)
         {
-            PictureFragment pictureFragment = new PictureFragment();
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+            PictureFragment pictureFragment = new PictureFragment(info, journeys);
             SecondFragment secondFragment = new SecondFragment();
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.replace(R.id.mainLayout , pictureFragment);
             ft.addToBackStack(null);
             ft.commit();
+            //journeys.get(info.position).setUris(this.uris);
+            this.checkInfo = info.position;
         }
         return super.onContextItemSelected(item);
     }
+
+    public void addUri(Uri u, AdapterView.AdapterContextMenuInfo info)
+    {
+        this.uris.add(u);
+    }
+
+
 
     private void getInfosAndWrite(AdapterView.AdapterContextMenuInfo info, View dialogView)
     {

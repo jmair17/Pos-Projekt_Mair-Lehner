@@ -32,14 +32,18 @@ public class PictureFragment extends Fragment {
     Button mBackBtn;
     private View u;
     Journey j;
-    SecondFragment secondFragment;
+    Uri d;
+
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
     AdapterView.AdapterContextMenuInfo info;
+    SecondFragment secondFragment;
+    List<Journey> temp;
 
-    public PictureFragment(AdapterView.AdapterContextMenuInfo info) {
+    public PictureFragment(AdapterView.AdapterContextMenuInfo info, List<Journey> temp) {
         this.info = info;
         this.secondFragment = new SecondFragment();
+        this.temp = temp;
     }
 
     public PictureFragment()
@@ -47,15 +51,9 @@ public class PictureFragment extends Fragment {
 
     }
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //VIEWS
-
-
-
-
     }
 
     @Override
@@ -132,11 +130,17 @@ public class PictureFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE )
         {
             //set image to image view
-            Uri d = data.getData();
-            List<Journey> temp = secondFragment.getJourneys();
-            temp.get(info.position).addUri(d);
+
+            d = data.getData();
+            secondFragment.addUri(d, info);
+            //temp.get(info.position).addUri(d);
             mImageView.setImageURI(d);
         }
+    }
+
+    public Uri getUri()
+    {
+        return d;
     }
 
 }
