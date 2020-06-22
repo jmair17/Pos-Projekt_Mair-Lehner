@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -28,8 +29,10 @@ public class Journey {
     //public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy hh:mm");
 
 
+
     public Journey(String category, String destination, String thingsNotToForget, String notes, String time, List<Uri> uris, String temperature) {
         setValues(category, destination, thingsNotToForget, notes, time, uris, temperature);
+
     }
 
     private void setValues(String category, String destination, String thingsNotToForget, String notes, String time, List<Uri> uris, String temperature) {
@@ -63,6 +66,7 @@ public class Journey {
     public String getDestination() {
         return destination;
     }
+
 
 
     public LocalDateTime getDate() {
@@ -119,6 +123,7 @@ public class Journey {
     {
         return this.uris;
     }
+
 
     @Override
     public String toString() {
