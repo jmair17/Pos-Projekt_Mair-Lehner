@@ -193,7 +193,7 @@ public class SecondFragment extends Fragment{
 
     public void getDestination(View vDialog){
         TextView temp = vDialog.findViewById(R.id.editTextDestination);
-        ziel = temp.getText().toString();
+        ziel = temp.getText().toString().toLowerCase();
     }
 
 
