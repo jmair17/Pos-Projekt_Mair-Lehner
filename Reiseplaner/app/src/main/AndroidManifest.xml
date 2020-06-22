@@ -3,6 +3,10 @@
     package="com.example.reiseplaner">
 
 
+    <!--//Adding Read External Storage Permission-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+
     <uses-permission android:name="android.permission.INTERNET"> </uses-permission>
 
 

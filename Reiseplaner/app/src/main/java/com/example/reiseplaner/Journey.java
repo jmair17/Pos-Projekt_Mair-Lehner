@@ -1,11 +1,15 @@
 package com.example.reiseplaner;
 
+import android.net.Uri;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Journey {
     private String category;
@@ -16,28 +20,41 @@ public class Journey {
     private String thingsNotToForget;
     private String notes;
     private String stringDate;
+    private List<Uri> uris;
+    private String temperature;
 
     private static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
     //public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy hh:mm");
 
 
 
-    public Journey(String category, String destination, String thingsNotToForget, String notes, String time) {
-        setValues(category, destination, thingsNotToForget, notes, time);
+    public Journey(String category, String destination, String thingsNotToForget, String notes, String time, List<Uri> uris, String temperature) {
+        setValues(category, destination, thingsNotToForget, notes, time, uris, temperature);
+
     }
 
-    private void setValues(String category, String destination, String thingsNotToForget, String notes, String time) {
+    private void setValues(String category, String destination, String thingsNotToForget, String notes, String time, List<Uri> uris, String temperature) {
         this.category = category;
         this.destination = destination;
         this.thingsNotToForget = thingsNotToForget;
         this.notes = notes;
 
         this.date = LocalDateTime.parse(time,DATE_FORMAT);
-        this.stringDate = time;
+        //this.stringDate = time;
+        this.uris = uris;
+        this.temperature = temperature;
     }
 
     public String getCategory() {
         return category;
+    }
+
+    public String getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(String temperature) {
+        this.temperature = temperature;
     }
 
 
@@ -84,6 +101,22 @@ public class Journey {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public void addUri(Uri uri)
+    {
+        this.uris.add(uri);
+    }
+
+
+    public void setUris(List<Uri> u)
+    {
+        this.uris = u;
+    }
+
+    public List<Uri> getUris()
+    {
+        return this.uris;
     }
 
 
