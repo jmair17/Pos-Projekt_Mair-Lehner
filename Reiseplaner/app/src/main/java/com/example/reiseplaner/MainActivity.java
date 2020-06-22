@@ -1,15 +1,21 @@
 package com.example.reiseplaner;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import android.widget.EditText;
 import android.widget.TextView;
 
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,6 +33,22 @@ public class MainActivity extends AppCompatActivity{
     TextView editTextSearchForDestination;
     Button buttonSearchForDestination;
     TextView showWeather;
+
+    TextView editText;
+
+    ///////////////ADDING NEW JOURNEY////////////////
+    private EditText editTextCategory;
+    private EditText editTextDestination;
+    private EditText editTextJourneyDate;
+    private EditText editTextThingsNotToForget;
+    private EditText editTextNotes;
+
+    ///////////////OTHERS////////////////////
+    private FloatingActionButton fab;
+    Button buttonStart;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

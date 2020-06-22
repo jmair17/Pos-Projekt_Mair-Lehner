@@ -1,0 +1,19 @@
+Was haben wir erledigt?
+
+	- OnContextMenu()
+	- Speichern und Laden von Reisen
+	- Menu
+	- Hinzufügen von Fotos
+	
+
+Liegen wir im Zeitplan?
+
+	- Ja
+
+Was machen wir bis nächste Woche?
+
+	- Preferences
+	- Sensor - GPS
+	- API zum laufen bringen
+
+Die API macht noch Probleme, ansonsten hat  alles Gut funktioniert und wir liegen wieder im Zeitplan.

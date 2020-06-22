@@ -3,6 +3,5 @@
     <corners android:radius="70dp"></corners>
     <gradient android:startColor="@color/cardView1"
         android:endColor="@color/cardView2">
-
     </gradient>
 </shape>

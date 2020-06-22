@@ -1,0 +1,10 @@
+Was haben wir erledigt?
+
+	- Update API
+	- Design weiterer Fragments
+
+Liegen wir im Zeitplan?
+
+	- Nein
+
+Wir liegen etwas hinter dem Zeitplan, versuchen jedoch nächste Woche alles aufzuholen.
