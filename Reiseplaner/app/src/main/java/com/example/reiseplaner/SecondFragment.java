@@ -94,9 +94,12 @@ public class SecondFragment extends Fragment{
     TextView time;
     List<Uri> uris;
     public int checkInfo;
+    TextView temperature;
+    private EditText editTextTemperature;
+    String finalTemperature;
 
     private AlertDialog dialogReference;
-    MainActivity.Weather handleWeather;
+    String ziel;
 
 
 
@@ -113,6 +116,7 @@ public class SecondFragment extends Fragment{
         View y = inflater.inflate(R.layout.listview_item, container, false);
         w = getLayoutInflater().inflate(R.layout.layout_newjourney, null);
         x = getLayoutInflater().inflate(R.layout.listview_item2, null);
+        temperature = y.findViewById(R.id.temperature);
         filename = "journeys.txt";
         SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         listView = v.findViewById(R.id.listView_trips);
@@ -132,7 +136,7 @@ public class SecondFragment extends Fragment{
 
 
         setHasOptionsMenu(true);
-        handleWeather = new MainActivity().new Weather();
+
 
 
 
@@ -175,15 +179,26 @@ public class SecondFragment extends Fragment{
                     .setTitle("New Journey")
                     .setView(w)
                     .setPositiveButton("Add", (dialog, which) ->{
-                        handleDialog(w);
-                        handleWeather.handleWeather(y);
-                        journeyAdapter.notifyDataSetChanged();
+                        getDestination(w);
+                        MyAsyncTask myAsyncTask = new MyAsyncTask(response -> {
+                            String temp = MyAsyncTask.search(response);
+                            finalTemperature = temp+"°C";
+                            temperature.setText(temp);
+                            handleDialog(w);
+                            journeyAdapter.notifyDataSetChanged();
+                        });
+                        myAsyncTask.execute("GET", "https://openweathermap.org/data/2.5/weather?q=" + ziel + "&appid=439d4b804bc8187953eb36d2a8c26a02");
+
                     } ).setNegativeButton("Cancel", null)
             .show();
         });
         return v;
     }
 
+    public void getDestination(View vDialog){
+        TextView temp = vDialog.findViewById(R.id.editTextDestination);
+        ziel = temp.getText().toString();
+    }
 
 
     public void handleDialog(final View vDialog)
@@ -199,7 +214,7 @@ public class SecondFragment extends Fragment{
         TextView notes = vDialog.findViewById(R.id.editTextNotes);
         String n = notes.getText().toString();
 
-        journeys.add(new Journey(cat, dest,things, n,date, new ArrayList<Uri>()));
+        journeys.add(new Journey(cat, dest,things, n,date, new ArrayList<Uri>(),finalTemperature));
         journeyAdapter.notifyDataSetChanged();
     }
 

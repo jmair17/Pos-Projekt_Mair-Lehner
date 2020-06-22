@@ -38,7 +38,12 @@ public class JourneyAdapter extends BaseAdapter {
         ((TextView) listItem.findViewById(R.id.date)).setText(journey.getDate().format(DATE_FORMAT));
         ((TextView) listItem.findViewById(R.id.destination)).setText(journey.getDestination());
         ((TextView) listItem.findViewById(R.id.category)).setText(journey.getCategory());
-
+        MyAsyncTask myAsyncTask = new MyAsyncTask(response -> {
+            String temp = MyAsyncTask.search(response);
+            ((TextView) listItem.findViewById(R.id.temperature)).setText(temp+"°C");
+            notifyDataSetChanged();
+        });
+        myAsyncTask.execute("GET", "https://openweathermap.org/data/2.5/weather?q=" + journey.getDestination() + "&appid=439d4b804bc8187953eb36d2a8c26a02");
 
         return listItem ;
     }

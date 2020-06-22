@@ -19,16 +19,17 @@ public class Journey {
     private String notes;
     private String stringDate;
     private List<Uri> uris;
+    private String temperature;
 
     private static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
     //public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy hh:mm");
 
 
-    public Journey(String category, String destination, String thingsNotToForget, String notes, String time, List<Uri> uris) {
-        setValues(category, destination, thingsNotToForget, notes, time, uris);
+    public Journey(String category, String destination, String thingsNotToForget, String notes, String time, List<Uri> uris, String temperature) {
+        setValues(category, destination, thingsNotToForget, notes, time, uris, temperature);
     }
 
-    private void setValues(String category, String destination, String thingsNotToForget, String notes, String time, List<Uri> uris) {
+    private void setValues(String category, String destination, String thingsNotToForget, String notes, String time, List<Uri> uris, String temperature) {
         this.category = category;
         this.destination = destination;
         this.thingsNotToForget = thingsNotToForget;
@@ -36,10 +37,19 @@ public class Journey {
         this.date = LocalDateTime.parse(time,DATE_FORMAT);
         //this.stringDate = time;
         this.uris = uris;
+        this.temperature = temperature;
     }
 
     public String getCategory() {
         return category;
+    }
+
+    public String getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(String temperature) {
+        this.temperature = temperature;
     }
 
 
