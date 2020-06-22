@@ -1,12 +1,22 @@
 package com.example.reiseplaner;
 
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.ContextMenu;
@@ -21,13 +31,17 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import org.w3c.dom.Text;
 
@@ -35,6 +49,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -64,21 +79,33 @@ public class SecondFragment extends Fragment{
     private List<Journey> journeys;
     private ListView listView;
     AlertDialog.Builder alert;
+    AlertDialog.Builder alert2;
     DatePickerDialog mDatePicker;
     TimePickerDialog mTimePicker;
     private List<Journey> ranOutItems;
     private String filename;
     private View w;
+    private View x;
+    private View p;
     TextView category;
     TextView destination;
     TextView importantThings;
     TextView notes;
     TextView time;
-    MainActivity.Weather handleWeather;
+    List<Uri> uris;
+    public int checkInfo;
+    TextView temperature;
+    private EditText editTextTemperature;
+    String finalTemperature;
+
+    private AlertDialog dialogReference;
+    String ziel;
+
+
 
 
     public SecondFragment() {
-        // Required empty public constructor
+
     }
 
 
@@ -86,27 +113,32 @@ public class SecondFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_second, container, false);
-        View y = inflater.inflate(R.layout.listview_item,container,false);
-        fab = v.findViewById(R.id.floatingactionbutton);
-        journeys = new ArrayList<>();
-        ranOutItems = new ArrayList<>();
-        alert = new AlertDialog.Builder(getActivity());
-        journeyAdapter = new JourneyAdapter(getActivity(), R.layout.listview_item, journeys);
+        View y = inflater.inflate(R.layout.listview_item, container, false);
+        w = getLayoutInflater().inflate(R.layout.layout_newjourney, null);
+        x = getLayoutInflater().inflate(R.layout.listview_item2, null);
+        temperature = y.findViewById(R.id.temperature);
+        filename = "journeys.txt";
+        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         listView = v.findViewById(R.id.listView_trips);
-        listView.setAdapter(journeyAdapter);
         listView.setLongClickable(true);
         registerForContextMenu(listView);
-        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        setHasOptionsMenu(true);
-        handleWeather = new MainActivity().new Weather();
-        filename = "journeys.txt";
-        w = getLayoutInflater().inflate(R.layout.layout_newjourney,null);
-
-
-
-
-
+        journeys = new ArrayList<>();
         load();
+        journeyAdapter = new JourneyAdapter(getActivity(), R.layout.listview_item, journeys);
+        listView.setAdapter(journeyAdapter);
+        journeyAdapter.notifyDataSetChanged();
+
+        this.uris = new ArrayList<>();
+        fab = v.findViewById(R.id.floatingactionbutton);
+        ranOutItems = new ArrayList<>();
+        alert = new AlertDialog.Builder(getActivity());
+        alert2 = new AlertDialog.Builder(getActivity());
+
+
+        setHasOptionsMenu(true);
+
+
+
 
 
 
@@ -147,18 +179,29 @@ public class SecondFragment extends Fragment{
                     .setTitle("New Journey")
                     .setView(w)
                     .setPositiveButton("Add", (dialog, which) ->{
-                        handleDialog(w);
-                        handleWeather.handleWeather(y);
-                        journeyAdapter.notifyDataSetChanged();
+                        getDestination(w);
+                        MyAsyncTask myAsyncTask = new MyAsyncTask(response -> {
+                            String temp = MyAsyncTask.search(response);
+                            finalTemperature = temp+"°C";
+                            temperature.setText(temp);
+                            handleDialog(w);
+                            journeyAdapter.notifyDataSetChanged();
+                        });
+                        myAsyncTask.execute("GET", "https://openweathermap.org/data/2.5/weather?q=" + ziel + "&appid=439d4b804bc8187953eb36d2a8c26a02");
+
                     } ).setNegativeButton("Cancel", null)
             .show();
         });
         return v;
     }
 
+    public void getDestination(View vDialog){
+        TextView temp = vDialog.findViewById(R.id.editTextDestination);
+        ziel = temp.getText().toString();
+    }
 
 
-    public void handleDialog( final View vDialog)
+    public void handleDialog(final View vDialog)
     {
         TextView category = vDialog.findViewById(R.id.editTextCategory);
         String cat = category.getText().toString();
@@ -171,7 +214,7 @@ public class SecondFragment extends Fragment{
         TextView notes = vDialog.findViewById(R.id.editTextNotes);
         String n = notes.getText().toString();
 
-        journeys.add(new Journey(cat, dest,things, n,date));
+        journeys.add(new Journey(cat, dest,things, n,date, new ArrayList<Uri>(),finalTemperature));
         journeyAdapter.notifyDataSetChanged();
     }
 
@@ -193,19 +236,24 @@ public class SecondFragment extends Fragment{
         return super.onOptionsItemSelected(item);
     }
 
+
+
     public void save()
     {
         try{
-            Gson gson = new Gson();
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+            builder.registerTypeHierarchyAdapter(Uri.class, new UriAdapter());
+            Gson gson = builder.create();
 
             FileOutputStream fileOutputStream = getActivity().openFileOutput(filename, getActivity().MODE_PRIVATE);
             PrintWriter out = new PrintWriter(new OutputStreamWriter(fileOutputStream));
-            for (int i = 0; i < journeys.size(); i++) {
-                String sJson = gson.toJson(journeys.get(i));
+                String sJson = gson.toJson(journeys);
                 out.println(sJson);
-            }
             out.flush();
             out.close();
+
+
         } catch (FileNotFoundException ex)
         {
             ex.printStackTrace();
@@ -215,30 +263,23 @@ public class SecondFragment extends Fragment{
     public void load()
     {
         GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+        builder.registerTypeHierarchyAdapter(Uri.class, new UriAdapter());
         Gson gson = builder.create();
-        String sJson = gson.toJson(journeys);
 
         try{
             FileInputStream fis = getActivity().openFileInput(filename);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+            StringBuilder json = new StringBuilder();
             String line;
-            String category;
-            String destiny;
-            String thingsNotToForget;
-            String notes;
-            String time;
             while ((line = in.readLine())!= null)
             {
-                String sJsonLoad = line;
-                Journey j = gson.fromJson(sJsonLoad, Journey.class);
-                category = j.getCategory();
-                destiny = j.getDestination();
-                thingsNotToForget = j.getThingsNotToForget();
-                notes = j.getNotes();
-                time = j.getDateAsString();
-                journeys.add(new Journey(category,destiny,thingsNotToForget,notes,time));
+                json.append(line);
             }
-            journeyAdapter.notifyDataSetChanged();
+            TypeToken<List<Journey>> token = new TypeToken<List<Journey>>() {
+            };
+            journeys = gson.fromJson(json.toString(), token.getType());
+
             //proveIfRunOut();
         }catch (IOException io)
         {
@@ -266,6 +307,7 @@ public class SecondFragment extends Fragment{
     }
 
 
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         w = getLayoutInflater().inflate(R.layout.layout_newjourney,null);
@@ -286,46 +328,59 @@ public class SecondFragment extends Fragment{
             alert.setNegativeButton("CANCEL", null);
             alert.show();
         }
-/*        if (item.getItemId () == R.id.showJourney ) {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-            dialogView = getLayoutInflater().inflate(R.layout.details_layout,null);
+        if (item.getItemId () == R.id.showJourney ) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-            Button button = dialogView.findViewById(R.id.back);
-
-
-            TextView date = dialogView.findViewById(R.id.date);
-            TextView text = dialogView.findViewById(R.id.textView);
-            TextView me = dialogView.findViewById(R.id.mess);
-            String datestring = notizen.get(info.position).getDate().toString();
-            date.setText(datestring);
-            String textstring = notizen.get(info.position).getText();
-            text.setText(textstring);
-            String messtring = notizen.get(info.position).getMessage();
-            me.setText(messtring);
-
-            alert2.setView(dialogView);
-
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialogReference.dismiss();
-                }
-            });
-
+            TextView category = x.findViewById(R.id.categoryShow);
+            category.setText(journeys.get(info.position).getCategory());
+            TextView destination = x.findViewById(R.id.destinationShow);
+            destination.setText(journeys.get(info.position).getDestination());
+            TextView journeyDate = x.findViewById(R.id.dateShow);
+            journeyDate.setText(journeys.get(info.position).getDateAsString());
+            TextView thingsNot = x.findViewById(R.id.importentThingsShow);
+            thingsNot.setText(journeys.get(info.position).getThingsNotToForget());
+            TextView notes = x.findViewById(R.id.noteShow);
+            notes.setText(journeys.get(info.position).getNotes());
+            alert2.setView(x);
             dialogReference = alert2.create();
             dialogReference.show();
+        }
+        if (item.getItemId() == R.id.showPicture)
+        {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+            //journeys.get(checkInfo).setUris(this.uris);
+            uris = journeys.get(info.position).getUris();
+            ShowPictureFragment showPictureFragment = new ShowPictureFragment(uris);
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.mainLayout , showPictureFragment);
+            ft.addToBackStack(null);
+            ft.commit();
+        }
+        if (item.getItemId() == R.id.addPicture)
+        {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+            PictureFragment pictureFragment = new PictureFragment(info.position, this);
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.mainLayout , pictureFragment);
+            ft.addToBackStack(null);
+            ft.commit();
 
-
-
-            //alert.setNegativeButton("CANCEL", null);
-            //AlertDialog dialg = alert.create();
-            //dialg.show();
-            //Button negativeButton = dialg.getButton(AlertDialog.BUTTON_NEGATIVE);
-            //negativeButton.setTextColor(Color.parseColor("#000000"));
-            //negativeButton.setBackgroundColor(Color.parseColor("#F7CD57"));
-        }*/
+            //journeys.get(info.position).setUris(this.uris);
+            this.checkInfo = info.position;
+        }
         return super.onContextItemSelected(item);
     }
+
+    public void addUri(Uri u, int pos)
+    {
+        //load();
+        journeys.get(pos).addUri(u);
+        save();
+        //this.uris.add(u);
+    }
+
+
+
 
     private void getInfosAndWrite(AdapterView.AdapterContextMenuInfo info, View dialogView)
     {
