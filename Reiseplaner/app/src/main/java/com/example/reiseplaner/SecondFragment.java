@@ -137,11 +137,6 @@ public class SecondFragment extends Fragment{
 
         setHasOptionsMenu(true);
 
-
-
-
-
-
         fab.setOnClickListener(k -> {
 
             editTextCategory = w.findViewById(R.id.editTextCategory);
