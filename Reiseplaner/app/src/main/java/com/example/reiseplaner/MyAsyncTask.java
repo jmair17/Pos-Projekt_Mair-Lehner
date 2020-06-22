@@ -3,6 +3,7 @@ package com.example.reiseplaner;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 public class MyAsyncTask extends AsyncTask<String, Integer, String> {
 
@@ -19,7 +21,7 @@ public class MyAsyncTask extends AsyncTask<String, Integer, String> {
         this.listener = listener;
     }
 
-    public static String search(String content){
+    public static String searchTemperature(String content){
         try {
             //First we will check data is retrieve successfully or not
 
@@ -36,6 +38,27 @@ public class MyAsyncTask extends AsyncTask<String, Integer, String> {
             return temperatureJson;
 
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String searchLatLon(String content){
+        String coords;
+        try {
+            //First we will check data is retrieve successfully or not
+            Log.i("contentData", content);
+
+            //JSON
+            JSONObject jsonObject = new JSONObject(content);
+            String coordData = jsonObject.getString("coord");
+
+            JSONObject mainPart = new JSONObject(coordData);
+            coords = mainPart.getString("lat");
+            coords +="," + mainPart.getString("lon");
+
+            return coords;
+        }catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
