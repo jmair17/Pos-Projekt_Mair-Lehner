@@ -1,5 +1,6 @@
 package com.example.reiseplaner;
 
+
 import android.net.Uri;
 
 import java.text.ParseException;
@@ -10,9 +11,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 public class Journey {
     private String category;
     private String destination;
+
     //private Date date;
     private LocalDateTime date;
     private String thingsNotToForget;
@@ -30,19 +33,23 @@ public class Journey {
     }
 
     private void setValues(String category, String destination, String thingsNotToForget, String notes, String time, List<Uri> uris, String temperature) {
+
         this.category = category;
         this.destination = destination;
         this.thingsNotToForget = thingsNotToForget;
         this.notes = notes;
+
         this.date = LocalDateTime.parse(time,DATE_FORMAT);
         //this.stringDate = time;
         this.uris = uris;
         this.temperature = temperature;
+
     }
 
     public String getCategory() {
         return category;
     }
+
 
     public String getTemperature() {
         return temperature;
@@ -70,6 +77,7 @@ public class Journey {
     public String getNotes() {
         return notes;
     }
+
 
     public String getDateAsString()
     {
@@ -111,7 +119,6 @@ public class Journey {
     {
         return this.uris;
     }
-
 
     @Override
     public String toString() {
