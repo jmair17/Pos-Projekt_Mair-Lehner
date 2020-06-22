@@ -41,6 +41,7 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import org.w3c.dom.Text;
 
@@ -48,6 +49,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -111,28 +113,30 @@ public class SecondFragment extends Fragment{
         View y = inflater.inflate(R.layout.listview_item, container, false);
         w = getLayoutInflater().inflate(R.layout.layout_newjourney, null);
         x = getLayoutInflater().inflate(R.layout.listview_item2, null);
-        this.uris = new ArrayList<>();
-
-
-
-        fab = v.findViewById(R.id.floatingactionbutton);
+        filename = "journeys.txt";
+        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        listView = v.findViewById(R.id.listView_trips);
+        listView.setLongClickable(true);
+        registerForContextMenu(listView);
         journeys = new ArrayList<>();
+        load();
+        journeyAdapter = new JourneyAdapter(getActivity(), R.layout.listview_item, journeys);
+        listView.setAdapter(journeyAdapter);
+        journeyAdapter.notifyDataSetChanged();
+
+        this.uris = new ArrayList<>();
+        fab = v.findViewById(R.id.floatingactionbutton);
         ranOutItems = new ArrayList<>();
         alert = new AlertDialog.Builder(getActivity());
         alert2 = new AlertDialog.Builder(getActivity());
-        journeyAdapter = new JourneyAdapter(getActivity(), R.layout.listview_item, journeys);
-        listView = v.findViewById(R.id.listView_trips);
-        listView.setAdapter(journeyAdapter);
-        listView.setLongClickable(true);
-        registerForContextMenu(listView);
-        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+
+
         setHasOptionsMenu(true);
         handleWeather = new MainActivity().new Weather();
-        filename = "journeys.txt";
 
 
 
-        load();
+
 
         fab.setOnClickListener(k -> {
 
@@ -195,7 +199,7 @@ public class SecondFragment extends Fragment{
         TextView notes = vDialog.findViewById(R.id.editTextNotes);
         String n = notes.getText().toString();
 
-        journeys.add(new Journey(cat, dest,things, n,date));
+        journeys.add(new Journey(cat, dest,things, n,date, new ArrayList<Uri>()));
         journeyAdapter.notifyDataSetChanged();
     }
 
@@ -217,19 +221,24 @@ public class SecondFragment extends Fragment{
         return super.onOptionsItemSelected(item);
     }
 
+
+
     public void save()
     {
         try{
-            Gson gson = new Gson();
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+            builder.registerTypeHierarchyAdapter(Uri.class, new UriAdapter());
+            Gson gson = builder.create();
 
             FileOutputStream fileOutputStream = getActivity().openFileOutput(filename, getActivity().MODE_PRIVATE);
             PrintWriter out = new PrintWriter(new OutputStreamWriter(fileOutputStream));
-            for (int i = 0; i < journeys.size(); i++) {
-                String sJson = gson.toJson(journeys.get(i));
+                String sJson = gson.toJson(journeys);
                 out.println(sJson);
-            }
             out.flush();
             out.close();
+
+
         } catch (FileNotFoundException ex)
         {
             ex.printStackTrace();
@@ -239,30 +248,23 @@ public class SecondFragment extends Fragment{
     public void load()
     {
         GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+        builder.registerTypeHierarchyAdapter(Uri.class, new UriAdapter());
         Gson gson = builder.create();
-        String sJson = gson.toJson(journeys);
 
         try{
             FileInputStream fis = getActivity().openFileInput(filename);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+            StringBuilder json = new StringBuilder();
             String line;
-            String category;
-            String destiny;
-            String thingsNotToForget;
-            String notes;
-            String time;
             while ((line = in.readLine())!= null)
             {
-                String sJsonLoad = line;
-                Journey j = gson.fromJson(sJsonLoad, Journey.class);
-                category = j.getCategory();
-                destiny = j.getDestination();
-                thingsNotToForget = j.getThingsNotToForget();
-                notes = j.getNotes();
-                time = j.getDateAsString();
-                journeys.add(new Journey(category,destiny,thingsNotToForget,notes,time));
+                json.append(line);
             }
-            journeyAdapter.notifyDataSetChanged();
+            TypeToken<List<Journey>> token = new TypeToken<List<Journey>>() {
+            };
+            journeys = gson.fromJson(json.toString(), token.getType());
+
             //proveIfRunOut();
         }catch (IOException io)
         {
@@ -331,7 +333,7 @@ public class SecondFragment extends Fragment{
         if (item.getItemId() == R.id.showPicture)
         {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-            journeys.get(checkInfo).setUris(this.uris);
+            //journeys.get(checkInfo).setUris(this.uris);
             uris = journeys.get(info.position).getUris();
             ShowPictureFragment showPictureFragment = new ShowPictureFragment(uris);
             FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -342,22 +344,26 @@ public class SecondFragment extends Fragment{
         if (item.getItemId() == R.id.addPicture)
         {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-            PictureFragment pictureFragment = new PictureFragment(info, journeys);
-            SecondFragment secondFragment = new SecondFragment();
+            PictureFragment pictureFragment = new PictureFragment(info.position, this);
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.replace(R.id.mainLayout , pictureFragment);
             ft.addToBackStack(null);
             ft.commit();
+
             //journeys.get(info.position).setUris(this.uris);
             this.checkInfo = info.position;
         }
         return super.onContextItemSelected(item);
     }
 
-    public void addUri(Uri u, AdapterView.AdapterContextMenuInfo info)
+    public void addUri(Uri u, int pos)
     {
-        this.uris.add(u);
+        //load();
+        journeys.get(pos).addUri(u);
+        save();
+        //this.uris.add(u);
     }
+
 
 
 

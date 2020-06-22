@@ -35,9 +35,9 @@ public class ShowPictureFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_show_picture, container, false);
         pictureAdapter = new PictureAdapter(getActivity(), R.layout.imagelayoutinlist, uris);
-        pictureAdapter.notifyDataSetChanged();
         listView = v.findViewById(R.id.imagelistview);
         listView.setAdapter(pictureAdapter);
+        pictureAdapter.notifyDataSetChanged();
         return v;
     }
 

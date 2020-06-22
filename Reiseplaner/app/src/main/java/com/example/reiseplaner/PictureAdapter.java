@@ -23,6 +23,7 @@ public class PictureAdapter extends BaseAdapter {
         this.context = context;
         this.layoutId = layoutId;
         this.journeys = journeys;
+        this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override

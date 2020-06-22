@@ -2,6 +2,7 @@ package com.example.reiseplaner;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -34,16 +35,15 @@ public class PictureFragment extends Fragment {
     Journey j;
     Uri d;
 
+
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
-    AdapterView.AdapterContextMenuInfo info;
+    int pos;
     SecondFragment secondFragment;
-    List<Journey> temp;
 
-    public PictureFragment(AdapterView.AdapterContextMenuInfo info, List<Journey> temp) {
-        this.info = info;
-        this.secondFragment = new SecondFragment();
-        this.temp = temp;
+    public PictureFragment(int info, SecondFragment secondFragment) {
+        this.pos = info;
+        this.secondFragment = secondFragment;
     }
 
     public PictureFragment()
@@ -129,10 +129,8 @@ public class PictureFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE )
         {
-            //set image to image view
-
             d = data.getData();
-            secondFragment.addUri(d, info);
+            secondFragment.addUri(d, pos);
             //temp.get(info.position).addUri(d);
             mImageView.setImageURI(d);
         }

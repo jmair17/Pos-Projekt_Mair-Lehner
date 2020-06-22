@@ -24,18 +24,18 @@ public class Journey {
     //public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy hh:mm");
 
 
-    public Journey(String category, String destination, String thingsNotToForget, String notes, String time) {
-        setValues(category, destination, thingsNotToForget, notes, time);
+    public Journey(String category, String destination, String thingsNotToForget, String notes, String time, List<Uri> uris) {
+        setValues(category, destination, thingsNotToForget, notes, time, uris);
     }
 
-    private void setValues(String category, String destination, String thingsNotToForget, String notes, String time) {
+    private void setValues(String category, String destination, String thingsNotToForget, String notes, String time, List<Uri> uris) {
         this.category = category;
         this.destination = destination;
         this.thingsNotToForget = thingsNotToForget;
         this.notes = notes;
         this.date = LocalDateTime.parse(time,DATE_FORMAT);
-        this.stringDate = time;
-        this.uris = new ArrayList<>();
+        //this.stringDate = time;
+        this.uris = uris;
     }
 
     public String getCategory() {
@@ -91,17 +91,10 @@ public class Journey {
         this.uris.add(uri);
     }
 
+
     public void setUris(List<Uri> u)
     {
-        List<Uri> tempUri = this.uris;
-        for (int i = 0; i < tempUri.size(); i++) {
-            for (int j = 0; j < u.size(); j++) {
-                if (!tempUri.get(i).equals(u.get(j)))
-                {
-                    uris.add(u.get(j));
-                }
-            }
-        }
+        this.uris = u;
     }
 
     public List<Uri> getUris()
