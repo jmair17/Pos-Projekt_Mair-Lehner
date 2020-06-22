@@ -1,4 +1,4 @@
-package com.example.reiseplaner.Services;
+package com.example.reiseplaner;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;

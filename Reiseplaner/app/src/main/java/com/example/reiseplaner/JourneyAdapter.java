@@ -1,4 +1,4 @@
-package com.example.reiseplaner.Adapter;
+package com.example.reiseplaner;
 
 import android.content.Context;
 import android.view.LayoutInflater;

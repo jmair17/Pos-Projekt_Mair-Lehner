@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#202020"
     android:orientation="vertical"
-    tools:context=".Fragments.StartFragment">
+    tools:context=".StartFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

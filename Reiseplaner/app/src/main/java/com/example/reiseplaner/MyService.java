@@ -1,4 +1,4 @@
-package com.example.reiseplaner.Services;
+package com.example.reiseplaner;
 
 import android.app.Service;
 import android.content.Intent;

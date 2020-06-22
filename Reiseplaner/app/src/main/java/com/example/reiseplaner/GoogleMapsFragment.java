@@ -1,4 +1,4 @@
-package com.example.reiseplaner.Fragments;
+package com.example.reiseplaner;
 
 
 import android.app.Activity;

@@ -1,4 +1,4 @@
-package com.example.reiseplaner.Fragments;
+package com.example.reiseplaner;
 
 import android.os.Bundle;
 
@@ -6,7 +6,7 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.example.reiseplaner.R;
 
-public class MySettingsFragment extends PreferenceFragmentCompat {
+public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
