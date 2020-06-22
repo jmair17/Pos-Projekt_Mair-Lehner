@@ -181,6 +181,7 @@ public class SecondFragment extends Fragment{
                             temperature.setText(temp);
                             handleDialog(w);
                             journeyAdapter.notifyDataSetChanged();
+                            save();
                         });
                         myAsyncTask.execute("GET", "https://openweathermap.org/data/2.5/weather?q=" + ziel + "&appid=439d4b804bc8187953eb36d2a8c26a02");
 
@@ -247,8 +248,6 @@ public class SecondFragment extends Fragment{
                 out.println(sJson);
             out.flush();
             out.close();
-
-
         } catch (FileNotFoundException ex)
         {
             ex.printStackTrace();
@@ -359,19 +358,16 @@ public class SecondFragment extends Fragment{
             ft.replace(R.id.mainLayout , pictureFragment);
             ft.addToBackStack(null);
             ft.commit();
-
-            //journeys.get(info.position).setUris(this.uris);
             this.checkInfo = info.position;
+            save();
         }
         return super.onContextItemSelected(item);
     }
 
     public void addUri(Uri u, int pos)
     {
-        //load();
         journeys.get(pos).addUri(u);
         save();
-        //this.uris.add(u);
     }
 
 
