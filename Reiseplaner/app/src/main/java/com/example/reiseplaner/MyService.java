@@ -38,26 +38,30 @@ public class MyService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         this.dest = intent.getStringArrayListExtra("Destinations");
-        t = new Thread() {
+        if (dest.size()!=0) {
+            t = new Thread() {
 
-            @Override
-            public void run() {
-                try {
-                    while (!isInterrupted()) {
-                        Thread.sleep(5000);
-                        checkTemperature();
-                        i++;
-                        if (i==dest.size())
-                        {
-                            i=0;
+                @Override
+                public void run() {
+                    try {
+                        while (!isInterrupted()) {
+                            Thread.sleep(5000);
+                            checkTemperature();
+                            i++;
+                            if (i == dest.size()) {
+                                i = 0;
+                            }
                         }
+                    } catch (InterruptedException e) {
                     }
-                } catch (InterruptedException e) {
                 }
-            }
-        };
-
-        t.start();
+            };
+            t.start();
+        }
+        else
+        {
+            Log.d("Tag", "Es ist noch keine Reise vorhanden.");
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -95,7 +99,8 @@ public class MyService extends Service {
                 sendNotification("You may should get a coat! It´s getting cold in "+destination+".", dest.indexOf(destination));
             }
         });
-        myAsyncTask.execute("GET", "https://openweathermap.org/data/2.5/weather?q=" + dest.get(i) + "&appid=439d4b804bc8187953eb36d2a8c26a02");
+            myAsyncTask.execute("GET", "https://openweathermap.org/data/2.5/weather?q=" + dest.get(i) + "&appid=439d4b804bc8187953eb36d2a8c26a02");
+
     }
 
     public void setNotificationManager()
@@ -116,6 +121,7 @@ public class MyService extends Service {
     public void onDestroy() {
         Toast.makeText(this,"Notifications will not be shown now", Toast.LENGTH_SHORT).show();
         t.interrupt();
+        boolean check = t.isAlive();
         super.onDestroy();
     }
 
