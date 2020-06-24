@@ -1,8 +1,12 @@
 package com.example.reiseplaner;
 
 
+import android.app.ActivityManager;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -46,6 +50,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -88,6 +93,7 @@ public class SecondFragment extends Fragment{
     private SharedPreferences prefs;
     private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
     boolean showNotifications;
+    MyService m;
 
     public SecondFragment() {
 
@@ -97,6 +103,7 @@ public class SecondFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        m = new MyService();
         View v = inflater.inflate(R.layout.fragment_second, container, false);
         View y = inflater.inflate(R.layout.listview_item, container, false);
         w = getLayoutInflater().inflate(R.layout.layout_newjourney, null);
@@ -118,6 +125,7 @@ public class SecondFragment extends Fragment{
         ranOutItems = new ArrayList<>();
         alert = new AlertDialog.Builder(getActivity());
         alert2 = new AlertDialog.Builder(getActivity());
+
 
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -166,8 +174,9 @@ public class SecondFragment extends Fragment{
                 mDatePicker.show();
             });
 
+            AlertDialog.Builder dialogbuilder = new AlertDialog.Builder(getActivity());
 
-            new AlertDialog.Builder(getActivity())
+           dialogbuilder
                     .setTitle("New Journey")
                     .setView(w)
                     .setPositiveButton("Add", (dialog, which) ->{
@@ -182,7 +191,13 @@ public class SecondFragment extends Fragment{
                         });
                         myAsyncTask.execute("GET", "https://openweathermap.org/data/2.5/weather?q=" + ziel + "&appid=439d4b804bc8187953eb36d2a8c26a02");
 
-                    } ).setNegativeButton("Cancel", null)
+                    } ).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+               @Override
+               public void onClick(DialogInterface dialog, int which) {
+                   ((ViewGroup)w.getParent()).removeView(w);
+                   w = getLayoutInflater().inflate(R.layout.layout_newjourney, null);
+               }
+           })
             .show();
         });
         return v;
@@ -193,23 +208,41 @@ public class SecondFragment extends Fragment{
         this.showNotifications = prefs.getBoolean("showNotifications", true);
         if (showNotifications)
         {
-            //startService();
+            startService();
             Log.d(null, "startService");
         }
         else
         {
-            //stopService();
+            stopService();
             Log.d(null, "stopService");
         }
     }
 
-    /*public void startService() {
-        startService(new Intent(getActivity().getBaseContext(), MyService.class));
+    public void startService() {
+        Intent i = new Intent(getActivity(), MyService.class);
+        ArrayList<String> d = new ArrayList<>();
+        for (int j = 0; j < journeys.size(); j++) {
+            d.add(journeys.get(j).getDestination());
+        }
+        i.putStringArrayListExtra("Destinations",d);
+        getActivity().startService(i);
     }
 
     public void stopService() {
-        stopService(new Intent(getActivity(), MyService.class));
-    }*/
+        if (isMyServiceRunning(MyService.class)) {
+            getActivity().stopService(new Intent(getActivity().getBaseContext(), MyService.class));
+        }
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void getDestination(View vDialog){
         TextView temp = vDialog.findViewById(R.id.editTextDestination);
@@ -413,22 +446,6 @@ public class SecondFragment extends Fragment{
         startActivity(mapIntent);
     }
 
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.optionsmenu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-    private final static int RQ_PREFERENCES = 1; //look in
-    the doc
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_preferences) {
-            Intent intent = new Intent(this,
-                    MySettingsActivity.class);
-            startActivityForResult(intent, RQ_PREFERENCES);
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
 
 
 

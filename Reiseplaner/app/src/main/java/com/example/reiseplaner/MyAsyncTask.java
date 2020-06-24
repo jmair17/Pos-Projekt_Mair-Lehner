@@ -1,7 +1,9 @@
 package com.example.reiseplaner;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +29,6 @@ public class MyAsyncTask extends AsyncTask<String, Integer, String> {
 
             //JSON
             JSONObject jsonObject = new JSONObject(content);
-            String weatherData = jsonObject.getString("weather");
             String mainTemperature = jsonObject.getString("main");
 
             String temperatureJson;
@@ -39,6 +40,36 @@ public class MyAsyncTask extends AsyncTask<String, Integer, String> {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static double controllTemperature(String degreece)
+    {
+        try {
+        JSONObject jsonObject = new JSONObject(degreece);
+        String mainTemperature = jsonObject.getString("main");
+
+        String temperatureJson;
+
+        JSONObject mainPart = new JSONObject(mainTemperature);
+        temperatureJson = mainPart.getString("temp");
+        double number = Double.parseDouble(temperatureJson);
+        return number;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public static String getDestination(String dest)
+    {
+        try
+        {
+            JSONObject jsonObject = new JSONObject(dest);
+            return jsonObject.getString("name");
+        } catch (Exception e) {
+        e.printStackTrace();
         }
         return null;
     }
