@@ -7,3 +7,6 @@ Auch kann man sich mit unserer App eine Route zum Reiseziel mittels Google Maps 
  
 
 <img width="600" alt="startScreenMockup" src="https://user-images.githubusercontent.com/55433990/84067504-c3653f80-a9c7-11ea-91f1-f1806e20b708.png">
+
+**Zeiteinteilung**
+https://docs.google.com/spreadsheets/d/1wki2545ntldvx8wj204NlVVGrx9pVjjWtylVsSHqEIE/edit#gid=0
