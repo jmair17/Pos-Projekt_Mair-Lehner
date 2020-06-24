@@ -47,6 +47,7 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -94,6 +95,8 @@ public class SecondFragment extends Fragment{
     private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
     boolean showNotifications;
     MyService m;
+    DateTimeFormatter DATE_FORMAT2;
+    SimpleDateFormat DATE_FORMAT;
 
     public SecondFragment() {
 
@@ -110,7 +113,8 @@ public class SecondFragment extends Fragment{
         x = getLayoutInflater().inflate(R.layout.listview_item2, null);
         temperature = y.findViewById(R.id.temperature);
         filename = "journeys.txt";
-        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        DATE_FORMAT2 = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         listView = v.findViewById(R.id.listView_trips);
         listView.setLongClickable(true);
         registerForContextMenu(listView);
@@ -146,9 +150,9 @@ public class SecondFragment extends Fragment{
 
             editTextCategory = w.findViewById(R.id.editTextCategory);
             editTextDestination = w.findViewById(R.id.editTextDestination);
-            editTextJourneyDate = w.findViewById(R.id.editTextJourneyDate);
             editTextThingsNotToForget = w.findViewById(R.id.editTextThingsNotToForget);
             editTextNotes = w.findViewById(R.id.editTextNotes);
+            editTextJourneyDate = w.findViewById(R.id.editTextJourneyDate);
 
             editTextJourneyDate.setOnClickListener(on -> {
                 Calendar currentDate = Calendar.getInstance();
@@ -195,12 +199,12 @@ public class SecondFragment extends Fragment{
                @Override
                public void onClick(DialogInterface dialog, int which) {
                    ((ViewGroup)w.getParent()).removeView(w);
-
                }
            })
             .show();
         });
         w = getLayoutInflater().inflate(R.layout.layout_newjourney, null);
+
         return v;
     }
 
@@ -370,13 +374,22 @@ public class SecondFragment extends Fragment{
         }
         if (item.getItemId() == R.id.change ) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-
+            //w = getLayoutInflater().inflate(R.layout.layout_newjourney, null);
             getInfosAndWrite(info,w);
+
 
             alert.setView(w);
             alert.setPositiveButton("OK", (dialog, which)-> sethandleDialog(w, info));
-            alert.setNegativeButton("CANCEL", null);
+            alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ((ViewGroup)w.getParent()).removeView(w);
+                    w = getLayoutInflater().inflate(R.layout.layout_newjourney, null);
+                }
+            });
             alert.show();
+            //w = getLayoutInflater().inflate(R.layout.layout_newjourney, null);
+
         }
         if (item.getItemId () == R.id.showJourney ) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -394,6 +407,7 @@ public class SecondFragment extends Fragment{
             alert2.setView(x);
             dialogReference = alert2.create();
             dialogReference.show();
+            x = getLayoutInflater().inflate(R.layout.listview_item2, null);
         }
         if (item.getItemId() == R.id.showPicture)
         {
@@ -461,11 +475,13 @@ public class SecondFragment extends Fragment{
 
         Journey n = journeys.get(info.position);
 
+        LocalDateTime t = n.getDate();
+
         category.setText(n.getCategory());
         destination.setText(n.getDestination());
         importantThings.setText(n.getThingsNotToForget());
         notes.setText(n.getNotes());
-        time.setText(n.getDateAsString());
+        time.setText(t.format(DATE_FORMAT2));
     }
 
     private void sethandleDialog(final View vDialog, AdapterView.AdapterContextMenuInfo info) {
@@ -482,13 +498,15 @@ public class SecondFragment extends Fragment{
         TextView notes = vDialog.findViewById(R.id.editTextNotes);
         String n = notes.getText().toString();
 
-
         journeys.get(info.position).setCategory(cat);
         journeys.get(info.position).setDestination(dest);
         journeys.get(info.position).setThingsNotToForget(things);
         journeys.get(info.position).setNotes(n);
         journeys.get(info.position).setDate(date1);
         journeyAdapter.notifyDataSetChanged();
+
+        ((ViewGroup)w.getParent()).removeView(w);
+        w = getLayoutInflater().inflate(R.layout.layout_newjourney, null);
 
     }
 }
