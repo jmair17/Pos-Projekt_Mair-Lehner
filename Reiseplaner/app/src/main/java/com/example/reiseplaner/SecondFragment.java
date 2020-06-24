@@ -195,18 +195,19 @@ public class SecondFragment extends Fragment{
                @Override
                public void onClick(DialogInterface dialog, int which) {
                    ((ViewGroup)w.getParent()).removeView(w);
-                   w = getLayoutInflater().inflate(R.layout.layout_newjourney, null);
+
                }
            })
             .show();
         });
+        w = getLayoutInflater().inflate(R.layout.layout_newjourney, null);
         return v;
     }
 
     public void loadPreferences()
     {
         this.showNotifications = prefs.getBoolean("showNotifications", true);
-        if (showNotifications)
+        if (showNotifications== true)
         {
             startService();
             Log.d(null, "startService");
