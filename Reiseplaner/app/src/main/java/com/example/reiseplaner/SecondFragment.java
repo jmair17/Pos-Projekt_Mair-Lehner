@@ -1,22 +1,21 @@
 package com.example.reiseplaner;
 
 
-import android.Manifest;
-import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
 import android.util.Log;
 import android.view.ContextMenu;
@@ -26,16 +25,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -43,13 +36,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import org.w3c.dom.Text;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -58,9 +48,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -100,9 +90,10 @@ public class SecondFragment extends Fragment{
 
     private AlertDialog dialogReference;
     String ziel;
-
-
-
+    private SharedPreferences prefs;
+    private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
+    boolean showNotifications;
+    MyService m;
 
     public SecondFragment() {
 
@@ -112,6 +103,7 @@ public class SecondFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        m = new MyService();
         View v = inflater.inflate(R.layout.fragment_second, container, false);
         View y = inflater.inflate(R.layout.listview_item, container, false);
         w = getLayoutInflater().inflate(R.layout.layout_newjourney, null);
@@ -135,12 +127,20 @@ public class SecondFragment extends Fragment{
         alert2 = new AlertDialog.Builder(getActivity());
 
 
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                Log.d(null, "entered: preferencesChanged");
+                loadPreferences();
+            }
+        };
+        prefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
+        loadPreferences();
+
+
         setHasOptionsMenu(true);
-
-
-
-
-
 
         fab.setOnClickListener(k -> {
 
@@ -174,30 +174,79 @@ public class SecondFragment extends Fragment{
                 mDatePicker.show();
             });
 
+            AlertDialog.Builder dialogbuilder = new AlertDialog.Builder(getActivity());
 
-            new AlertDialog.Builder(getActivity())
+           dialogbuilder
                     .setTitle("New Journey")
                     .setView(w)
                     .setPositiveButton("Add", (dialog, which) ->{
                         getDestination(w);
                         MyAsyncTask myAsyncTask = new MyAsyncTask(response -> {
-                            String temp = MyAsyncTask.search(response);
+                            String temp = MyAsyncTask.searchTemperature(response);
                             finalTemperature = temp+"°C";
                             temperature.setText(temp);
                             handleDialog(w);
                             journeyAdapter.notifyDataSetChanged();
+                            save();
                         });
                         myAsyncTask.execute("GET", "https://openweathermap.org/data/2.5/weather?q=" + ziel + "&appid=439d4b804bc8187953eb36d2a8c26a02");
 
-                    } ).setNegativeButton("Cancel", null)
+                    } ).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+               @Override
+               public void onClick(DialogInterface dialog, int which) {
+                   ((ViewGroup)w.getParent()).removeView(w);
+                   w = getLayoutInflater().inflate(R.layout.layout_newjourney, null);
+               }
+           })
             .show();
         });
         return v;
     }
 
+    public void loadPreferences()
+    {
+        this.showNotifications = prefs.getBoolean("showNotifications", true);
+        if (showNotifications)
+        {
+            startService();
+            Log.d(null, "startService");
+        }
+        else
+        {
+            stopService();
+            Log.d(null, "stopService");
+        }
+    }
+
+    public void startService() {
+        Intent i = new Intent(getActivity(), MyService.class);
+        ArrayList<String> d = new ArrayList<>();
+        for (int j = 0; j < journeys.size(); j++) {
+            d.add(journeys.get(j).getDestination());
+        }
+        i.putStringArrayListExtra("Destinations",d);
+        getActivity().startService(i);
+    }
+
+    public void stopService() {
+        if (isMyServiceRunning(MyService.class)) {
+            getActivity().stopService(new Intent(getActivity().getBaseContext(), MyService.class));
+        }
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void getDestination(View vDialog){
         TextView temp = vDialog.findViewById(R.id.editTextDestination);
-        ziel = temp.getText().toString();
+        ziel = temp.getText().toString().toLowerCase();
     }
 
 
@@ -220,17 +269,19 @@ public class SecondFragment extends Fragment{
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_layout, menu);
+        inflater.inflate(R.menu.preferences_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         Log.d("Ok", "onOptionsItemSelected:" + id);
         switch (id) {
-            case R.id.save:
-                save();
+            case R.id.menu_settings:
+                Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                startActivityForResult(intent, 1);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -252,8 +303,6 @@ public class SecondFragment extends Fragment{
                 out.println(sJson);
             out.flush();
             out.close();
-
-
         } catch (FileNotFoundException ex)
         {
             ex.printStackTrace();
@@ -356,6 +405,20 @@ public class SecondFragment extends Fragment{
             ft.addToBackStack(null);
             ft.commit();
         }
+        if (item.getItemId() == R.id.showMap)
+        {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+            ziel = journeys.get(info.position).getDestination();
+            MyAsyncTask task = new MyAsyncTask(new MyAsyncTask.OnTaskFinishedListener() {
+                @Override
+                public void onTaskFinished(String response) {
+                    String coords = MyAsyncTask.searchLatLon(response);
+                    openMap(coords);
+                }
+            });
+            task.execute("GET","https://openweathermap.org/data/2.5/weather?q=" + ziel + "&appid=439d4b804bc8187953eb36d2a8c26a02");
+
+        }
         if (item.getItemId() == R.id.addPicture)
         {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
@@ -364,19 +427,23 @@ public class SecondFragment extends Fragment{
             ft.replace(R.id.mainLayout , pictureFragment);
             ft.addToBackStack(null);
             ft.commit();
-
-            //journeys.get(info.position).setUris(this.uris);
             this.checkInfo = info.position;
+            save();
         }
         return super.onContextItemSelected(item);
     }
 
     public void addUri(Uri u, int pos)
     {
-        //load();
         journeys.get(pos).addUri(u);
         save();
-        //this.uris.add(u);
+    }
+
+    private void openMap(String coords) {
+        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + coords);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
     }
 
 

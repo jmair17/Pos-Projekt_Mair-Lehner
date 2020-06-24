@@ -5,6 +5,9 @@
         android:id="@+id/showJourney"
         android:title="ShowJourney" />
     <item
+        android:id="@+id/showMap"
+        android:title="ShowMap" />
+    <item
         android:id="@+id/change"
         android:title="Change" />
     <item

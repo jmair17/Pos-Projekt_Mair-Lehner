@@ -7,7 +7,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
+import com.example.reiseplaner.Journey;
+import com.example.reiseplaner.MyAsyncTask;
+import com.example.reiseplaner.R;
+
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +42,7 @@ public class JourneyAdapter extends BaseAdapter {
         ((TextView) listItem.findViewById(R.id.destination)).setText(journey.getDestination());
         ((TextView) listItem.findViewById(R.id.category)).setText(journey.getCategory());
         MyAsyncTask myAsyncTask = new MyAsyncTask(response -> {
-            String temp = MyAsyncTask.search(response);
+            String temp = MyAsyncTask.searchTemperature(response);
             ((TextView) listItem.findViewById(R.id.temperature)).setText(temp+"°C");
             notifyDataSetChanged();
         });
