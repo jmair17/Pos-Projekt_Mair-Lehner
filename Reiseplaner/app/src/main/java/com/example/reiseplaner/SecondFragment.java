@@ -194,7 +194,7 @@ public class SecondFragment extends Fragment{
                             save();
                         });
                         myAsyncTask.execute("GET", "https://openweathermap.org/data/2.5/weather?q=" + ziel + "&appid=439d4b804bc8187953eb36d2a8c26a02");
-
+                        ((ViewGroup)w.getParent()).removeAllViews();
                     } ).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                @Override
                public void onClick(DialogInterface dialog, int which) {
