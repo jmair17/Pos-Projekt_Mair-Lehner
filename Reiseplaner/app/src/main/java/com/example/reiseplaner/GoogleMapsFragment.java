@@ -89,9 +89,9 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback {
         new GoogleMapsAsyncTask().execute();
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_google_maps, container, false);
+        //return inflater.inflate(R.layout.fragment_google_maps, container, false);
 
-
+        return null;
     }
 
     class GoogleMapsAsyncTask extends AsyncTask<String, Integer, String>{

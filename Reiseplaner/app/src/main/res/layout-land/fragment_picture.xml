@@ -10,8 +10,8 @@
     <!--ImageView on which image will be set-->
     <ImageView
         android:id="@+id/image_view"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_image_black_24dp" />
     <!--Button to choose image-->
