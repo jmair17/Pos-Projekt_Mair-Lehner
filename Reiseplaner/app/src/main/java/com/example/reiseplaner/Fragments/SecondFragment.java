@@ -330,8 +330,6 @@ public class SecondFragment extends Fragment{
             TypeToken<List<Journey>> token = new TypeToken<List<Journey>>() {
             };
             journeys = gson.fromJson(json.toString(), token.getType());
-
-            //proveIfRunOut();
         }catch (IOException io)
         {
             io.getStackTrace();
@@ -387,6 +385,8 @@ public class SecondFragment extends Fragment{
             thingsNot.setText(journeys.get(info.position).getThingsNotToForget());
             TextView notes = x.findViewById(R.id.noteShow);
             notes.setText(journeys.get(info.position).getNotes());
+            TextView date = x.findViewById(R.id.dateShow);
+            date.setText(journeys.get(info.position).getDate().format(DATE_FORMAT2));
             alert2.setView(x);
             dialogReference = alert2.create();
             dialogReference.show();
