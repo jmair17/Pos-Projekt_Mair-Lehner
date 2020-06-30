@@ -1,0 +1,15 @@
+Was haben wir erledigt?
+
+	- Hinzufügen von Fotos
+	- Landscapemodus
+	- Api fertig
+	- Preferences
+	- Notifications
+	- GPS
+	
+
+Liegen wir im Zeitplan?
+
+	- Ja - alles wurde fertiggestellt
+
+
