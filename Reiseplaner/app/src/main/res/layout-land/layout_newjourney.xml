@@ -10,7 +10,6 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
         android:backgroundTint="@color/colorAccent"
         android:ems="10"
         android:hint="Category"
@@ -23,7 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
         android:backgroundTint="@color/colorAccent"
         android:ems="10"
         android:hint="Destination"
@@ -36,7 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
         android:backgroundTint="@color/colorAccent"
         android:ems="10"
         android:hint="Date (Click to add)" />
@@ -47,7 +44,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
         android:backgroundTint="@color/colorAccent"
         android:ems="10"
         android:hint="Was darf ich nicht vergessen?" />
@@ -58,7 +54,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
         android:backgroundTint="@color/colorAccent"
         android:ems="10"
         android:hint="Notizen" />
