@@ -15,16 +15,13 @@ import java.util.List;
 public class Journey {
     private String category;
     private String destination;
-    //private Date date;
     private LocalDateTime date;
     private String thingsNotToForget;
     private String notes;
-    private String stringDate;
     private List<Uri> uris;
     private String temperature;
 
     private static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-    //public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy hh:mm");
 
 
 
@@ -40,7 +37,6 @@ public class Journey {
         this.thingsNotToForget = thingsNotToForget;
         this.notes = notes;
         this.date = LocalDateTime.parse(time,DATE_FORMAT);
-        //this.stringDate = time;
         this.uris = uris;
         this.temperature = temperature;
 
@@ -78,10 +74,6 @@ public class Journey {
         return notes;
     }
 
-    public String getDateAsString()
-    {
-        return stringDate;
-    }
 
     public void setCategory(String category) {
         this.category = category;

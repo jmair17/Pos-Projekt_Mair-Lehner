@@ -10,12 +10,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
-
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -28,8 +26,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-
-
 import com.example.reiseplaner.Adapter.JourneyAdapter;
 import com.example.reiseplaner.Adapter.LocalDateTimeAdapter;
 import com.example.reiseplaner.Adapter.UriAdapter;
@@ -42,7 +38,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -60,52 +55,51 @@ import java.util.Calendar;
 import java.util.List;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class SecondFragment extends Fragment{
 
+    ///////////////BUTTON////////////////
     private FloatingActionButton fab;
-    ///////////////ADDING NEW JOURNEY////////////////
-    private EditText editTextCategory;
-    private EditText editTextDestination;
-    private EditText editTextJourneyDate;
-    private EditText editTextThingsNotToForget;
-    private EditText editTextNotes;
-    private JourneyAdapter journeyAdapter;
-    private List<Journey> journeys;
-    private ListView listView;
-    AlertDialog.Builder alert;
-    AlertDialog.Builder alert2;
-    DatePickerDialog mDatePicker;
-    TimePickerDialog mTimePicker;
-    private List<Journey> ranOutItems;
-    private String filename;
+    ///////////////VIEW////////////////
     private View w;
     private View x;
-    private View p;
-    TextView category;
-    TextView destination;
-    TextView importantThings;
-    TextView notes;
-    TextView time;
-    List<Uri> uris;
-    public int checkInfo;
-    TextView temperature;
-    private EditText editTextTemperature;
-    String finalTemperature;
-
-    private AlertDialog dialogReference;
-    String ziel;
-    private SharedPreferences prefs;
-    private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
-    boolean showNotifications;
-    MyService m;
+    ///////////////TEXTVIEW////////////////
+    private TextView category;
+    private TextView destination;
+    private TextView importantThings;
+    private TextView notes;
+    private TextView time;
+    private TextView temperature;
+    ///////////////LIST////////////////
+    private List<Journey> ranOutItems;
+    private List<Journey> journeys;
+    private List<Uri> uris;
+    ///////////////STRING////////////////
+    private String filename;
+    private String ziel;
+    private String finalTemperature;
+    ///////////////FORMAT////////////////
     DateTimeFormatter DATE_FORMAT2;
     SimpleDateFormat DATE_FORMAT;
+    ///////////////ALERT////////////////
+    private AlertDialog dialogReference;
+    private AlertDialog.Builder alert;
+    private AlertDialog.Builder alert2;
+    ///////////////SHARED PREFERENCES////////////////
+    private SharedPreferences prefs;
+    private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
+    ///////////////PICKER DIALOG////////////////
+    private DatePickerDialog mDatePicker;
+    private TimePickerDialog mTimePicker;
+    ///////////////OTHERS////////////////
+    private EditText editTextJourneyDate;
+    private JourneyAdapter journeyAdapter;
+    private ListView listView;
+    private boolean showNotifications;
+    MyService m;
+
 
     public SecondFragment() {
-
     }
 
 
@@ -154,10 +148,7 @@ public class SecondFragment extends Fragment{
 
         fab.setOnClickListener(k -> {
 
-            editTextCategory = w.findViewById(R.id.editTextCategory);
-            editTextDestination = w.findViewById(R.id.editTextDestination);
-            editTextThingsNotToForget = w.findViewById(R.id.editTextThingsNotToForget);
-            editTextNotes = w.findViewById(R.id.editTextNotes);
+
             editTextJourneyDate = w.findViewById(R.id.editTextJourneyDate);
 
             editTextJourneyDate.setOnClickListener(on -> {
@@ -346,19 +337,7 @@ public class SecondFragment extends Fragment{
             io.getStackTrace();
         }
     }
-
-    public void proveIfRunOut()
-    {
-        LocalDateTime now = LocalDateTime.now();
-        for (int i = 0; i < journeys.size(); i++) {
-            if (journeys.get(i).getDate().isBefore(now))
-            {
-                ranOutItems.add(journeys.get(i));
-                journeys.remove(journeys.get(i));
-                i--;
-            }
-        }
-    }
+    
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -404,8 +383,6 @@ public class SecondFragment extends Fragment{
             category.setText(journeys.get(info.position).getCategory());
             TextView destination = x.findViewById(R.id.destinationShow);
             destination.setText(journeys.get(info.position).getDestination());
-            TextView journeyDate = x.findViewById(R.id.dateShow);
-            journeyDate.setText(journeys.get(info.position).getDateAsString());
             TextView thingsNot = x.findViewById(R.id.importentThingsShow);
             thingsNot.setText(journeys.get(info.position).getThingsNotToForget());
             TextView notes = x.findViewById(R.id.noteShow);
@@ -418,7 +395,6 @@ public class SecondFragment extends Fragment{
         if (item.getItemId() == R.id.showPicture)
         {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-            //journeys.get(checkInfo).setUris(this.uris);
             uris = journeys.get(info.position).getUris();
             ShowPictureFragment showPictureFragment = new ShowPictureFragment(uris);
             FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -448,7 +424,6 @@ public class SecondFragment extends Fragment{
             ft.replace(R.id.mainLayout , pictureFragment);
             ft.addToBackStack(null);
             ft.commit();
-            this.checkInfo = info.position;
             save();
         }
         return super.onContextItemSelected(item);
