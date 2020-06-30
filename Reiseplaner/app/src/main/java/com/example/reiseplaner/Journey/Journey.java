@@ -20,14 +20,10 @@ public class Journey {
     private String notes;
     private List<Uri> uris;
     private String temperature;
-
     private static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-
-
 
     public Journey(String category, String destination, String thingsNotToForget, String notes, String time, List<Uri> uris, String temperature) {
         setValues(category, destination, thingsNotToForget, notes, time, uris, temperature);
-
     }
 
     private void setValues(String category, String destination, String thingsNotToForget, String notes, String time, List<Uri> uris, String temperature) {
@@ -46,7 +42,6 @@ public class Journey {
         return category;
     }
 
-
     public String getTemperature() {
         return temperature;
     }
@@ -55,16 +50,13 @@ public class Journey {
         this.temperature = temperature;
     }
 
-
     public String getDestination() {
         return destination;
     }
 
-
     public LocalDateTime getDate() {
         return date;
     }
-
 
     public String getThingsNotToForget() {
         return thingsNotToForget;
@@ -73,7 +65,6 @@ public class Journey {
     public String getNotes() {
         return notes;
     }
-
 
     public void setCategory(String category) {
         this.category = category;
@@ -99,7 +90,6 @@ public class Journey {
     {
         this.uris.add(uri);
     }
-
 
     public void setUris(List<Uri> u)
     {

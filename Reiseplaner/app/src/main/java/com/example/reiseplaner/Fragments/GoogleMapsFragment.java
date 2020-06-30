@@ -47,12 +47,12 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     public static EditText destination;
     public static TextView temperature;
-    String CITY;
+    public String CITY;
     public String urlSource;
-    String coordsLon;
-    String coordsLat;
-    double latitude;
-    double longitude;
+    public String coordsLon;
+    public String coordsLat;
+    public double latitude;
+    public double longitude;
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -64,19 +64,11 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngCoords));
     }
 
-    /*public GoogleMapsFragment() {
-        // Required empty public constructor
-        SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-    }*/
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //Location currentLocation = .FusedLocationApi.getLastLocation(googleApiClient);
         destination = (EditText) container.findViewById(R.id.editTextDestination);
         temperature = (TextView) container.findViewById(R.id.temperature);
 
@@ -87,9 +79,6 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback {
 
         getLongLat();
         new GoogleMapsAsyncTask().execute();
-
-        // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_google_maps, container, false);
 
         return null;
     }
@@ -170,31 +159,4 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback {
         return longitude;
     }
 
-    /*
-    //Getting current location
-    private void getCurrentLocation() {
-        LocationManager locationManager = (LocationManager) this.getSystemServics(Context.LOCATION_SERVICE);
-        mMap.clear();
-        if (ActivityCompat.checkSelfPermission(null, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(null, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        if (location != null) {
-            //Getting longitude and latitude
-            longitude = location.getLongitude();
-            latitude = location.getLatitude();
-
-            //moving the map to location
-           // moveMap();
-        }
-    }
-
-    */
 }

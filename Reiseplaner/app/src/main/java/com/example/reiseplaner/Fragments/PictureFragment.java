@@ -129,14 +129,8 @@ public class PictureFragment extends Fragment {
         {
             d = data.getData();
             secondFragment.addUri(d, pos);
-            //temp.get(info.position).addUri(d);
             mImageView.setImageURI(d);
         }
-    }
-
-    public Uri getUri()
-    {
-        return d;
     }
 
 }

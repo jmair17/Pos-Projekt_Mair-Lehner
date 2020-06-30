@@ -36,7 +36,6 @@ public class JourneyAdapter extends BaseAdapter {
     @Override
     public View getView(int i , View view, ViewGroup viewGroup) {
         Journey journey = journeys.get(i);
-        //String datum = DATE_FORMAT.format(journey.getDate());
         View listItem = (view == null) ? inflater.inflate(this.layoutId,null ) : view;
         ((TextView) listItem.findViewById(R.id.date)).setText(journey.getDate().format(DATE_FORMAT));
         ((TextView) listItem.findViewById(R.id.destination)).setText(journey.getDestination());

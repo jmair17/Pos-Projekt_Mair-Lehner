@@ -126,15 +126,4 @@ public class MyService extends Service {
         boolean check = t.isAlive();
         super.onDestroy();
     }
-
-    /* //Gehört in onCreate in MainActivitiy
-
-    public void startService(){
-        startService(new Intent(getBaseContext(), MyService.class));
-       }
-
-       public void stopService(){
-        stopService(new Intent(getBaseContext(), MyService.class));
-       }
-     */
 }
