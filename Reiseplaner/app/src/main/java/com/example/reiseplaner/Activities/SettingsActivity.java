@@ -1,8 +1,10 @@
-package com.example.reiseplaner;
+package com.example.reiseplaner.Activities;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.reiseplaner.Fragments.SettingsFragment;
 
 public class SettingsActivity extends AppCompatActivity {
 

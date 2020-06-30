@@ -1,4 +1,4 @@
-package com.example.reiseplaner;
+package com.example.reiseplaner.AsyncTask;
 
 import android.content.Intent;
 import android.os.AsyncTask;

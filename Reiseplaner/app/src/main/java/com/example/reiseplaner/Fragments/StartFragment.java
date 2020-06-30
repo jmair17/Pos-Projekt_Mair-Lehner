@@ -1,4 +1,4 @@
-package com.example.reiseplaner;
+package com.example.reiseplaner.Fragments;
 
 
 import android.os.Bundle;
@@ -10,6 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.example.reiseplaner.Fragments.PictureFragment;
+import com.example.reiseplaner.Fragments.SecondFragment;
+import com.example.reiseplaner.R;
 
 
 /**

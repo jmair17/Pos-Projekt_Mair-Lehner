@@ -1,4 +1,4 @@
-package com.example.reiseplaner;
+package com.example.reiseplaner.Fragments;
 
 import android.Manifest;
 import android.app.Activity;
@@ -20,6 +20,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.example.reiseplaner.Journey.Journey;
+import com.example.reiseplaner.R;
 
 public class PictureFragment extends Fragment {
 

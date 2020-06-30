@@ -1,4 +1,4 @@
-package com.example.reiseplaner;
+package com.example.reiseplaner.Services;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -11,7 +11,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
+
+import com.example.reiseplaner.AsyncTask.MyAsyncTask;
+import com.example.reiseplaner.R;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.reiseplaner;
+package com.example.reiseplaner.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.reiseplaner.Journey;
-import com.example.reiseplaner.MyAsyncTask;
+import com.example.reiseplaner.Journey.Journey;
+import com.example.reiseplaner.AsyncTask.MyAsyncTask;
 import com.example.reiseplaner.R;
 
 import java.time.format.DateTimeFormatter;

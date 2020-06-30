@@ -1,9 +1,8 @@
-package com.example.reiseplaner;
+package com.example.reiseplaner.Fragments;
 
 
 import android.app.ActivityManager;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,6 +30,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
+import com.example.reiseplaner.Adapter.JourneyAdapter;
+import com.example.reiseplaner.Adapter.LocalDateTimeAdapter;
+import com.example.reiseplaner.Adapter.UriAdapter;
+import com.example.reiseplaner.Journey.Journey;
+import com.example.reiseplaner.AsyncTask.MyAsyncTask;
+import com.example.reiseplaner.Services.MyService;
+import com.example.reiseplaner.R;
+import com.example.reiseplaner.Activities.SettingsActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -51,7 +58,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**

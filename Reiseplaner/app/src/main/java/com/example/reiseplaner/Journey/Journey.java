@@ -1,4 +1,4 @@
-package com.example.reiseplaner;
+package com.example.reiseplaner.Journey;
 
 
 import android.net.Uri;

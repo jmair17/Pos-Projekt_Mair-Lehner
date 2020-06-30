@@ -1,4 +1,4 @@
-package com.example.reiseplaner;
+package com.example.reiseplaner.Adapter;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
