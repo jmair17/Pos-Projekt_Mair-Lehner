@@ -92,7 +92,7 @@ public class MyService extends Service {
     {
         MyAsyncTask myAsyncTask = new MyAsyncTask(response -> {
             double number = MyAsyncTask.controllTemperature(response);
-            if (number < 24)
+            if (number < 14)
             {
                 String destination = MyAsyncTask.getDestination(response);
                 Log.d("Tag","It´s cold in "+destination);
